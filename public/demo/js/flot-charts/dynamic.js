@@ -103,5 +103,5 @@ $(document).ready(function(){
         plot.draw();
         setTimeout(chartUpdate, updateInterval);
     }
-    chartUpdate();
+    //chartUpdate();
 });

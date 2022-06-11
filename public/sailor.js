@@ -18,10 +18,10 @@ setInterval(() => {
   coinmarketcapWax();
   alcorPrice();
 }, 15000);
+///////////////////////////////////////variable///////////////////////////////////////
 ////////////////////////////////////////version////////////////////////////////////////
 document.getElementById("version").innerHTML = `Sailors World Bot ${version}`;
 ////////////////////////////////////////version////////////////////////////////////////
-///////////////////////////////////////variable///////////////////////////////////////
 /////////////////////////////////////////theme////////////////////////////////////////
   if(getTheme != null) {
     document.getElementsByTagName("body")[0].setAttribute("data-sa-theme", getTheme);
@@ -166,7 +166,7 @@ async function showSetup() {
     `<select class="btn btn-dark dropdown-toggle" id="selectMode-${rare}" style="width: 180px;" disabled onchange="dropdownMode(this.value, '${rare}')">` +
     `<option style="background: black; text-align: left;" value="-">Select Mode</option>` +
     `<option style="background: black; text-align: left;" value="expeditions">Expeditions</option>` +
-    `<option style="background: black; text-align: left;" value="trawls">Trawls</select>&emsp;&emsp;` +
+    `<option style="background: black; text-align: left;" value="trawls">Trawls</option></select>&emsp;&emsp;` +
     `<div class="toggle-switch toggle-switch--green"><input type="checkbox" value="off" class="toggle-switch__checkbox" id="onToggle-${rare}" onclick="onoffToggle('${rare}')"><i class="toggle-switch__helper"></i></div>&emsp;&emsp;` +           
     `<div id="onoff-${rare}"><label class="btn btn-dark" style="width: 50px; color: red;">OFF</label></div>` +
     `</div><br>` +
@@ -455,7 +455,7 @@ async function startBtn() {
     }
     catch(err) {
       console.log(err);
-      document.getElementById('log').innerHTML += thisTime() + `: ERROR(${err.message}) \n`;
+      document.getElementById('log').innerHTML += thisTime() + `: ERROR(${err.message}) \n`;  
     }
     
   }
@@ -464,6 +464,7 @@ async function startBtn() {
     stopLoop();
     document.getElementById("startBtn").innerHTML = `<button class="btn btn-success btn--icon-text" style="width: 100%;" onclick="startBtn()">Start Bot</button>`;
     document.getElementById('log').innerHTML += thisTime() + `: Bot ได้หยุดทำงานแล้ว !!! \n`;
+    scrollTextarea();
   } 
 }
 //////////////////////////////////////start button///////////////////////////////////////////
@@ -508,6 +509,7 @@ async function chkrefill() {
       if(element.tank <= refilPercen) {
         if(element.fuel < refillNeed) {
           document.getElementById('log').innerHTML += thisTime() + `: Refill ไม่สำเร็จ มีเน้ำมันไม่พอ !!! \n`;
+          scrollTextarea();
         }
         let result = await wax.api.transact({ 
           actions: [{
@@ -527,11 +529,12 @@ async function chkrefill() {
             expireSeconds: 30
           });
           document.getElementById('log').innerHTML += thisTime() + `: Refill สำเร็จ !!! \n`;
+          scrollTextarea();
       } 
     }
     catch(err) {
       document.getElementById('log').innerHTML += thisTime() + `: Refill ไม่สำเร็จ !!! (${err.message}) \n`;
-      console.log(err.message);
+      scrollTextarea();
     }  
   })) 
 } 
@@ -568,11 +571,12 @@ async function chkrepair() {
             expireSeconds: 30
           });
           document.getElementById('log').innerHTML += thisTime() + `: Repair ${id} สำเร็จ !!! \n`;
-          //await updateTool(id);
+          scrollTextarea();
       }      
     }
     catch(err) {
       document.getElementById('log').innerHTML += thisTime() + `: Repair ${id} ไม่สำเร็จ !!! (${err.message}) \n`;
+      scrollTextarea();
     }
   }));
 } 
@@ -891,11 +895,12 @@ async function claim(id, mode) {
         expireSeconds: 30
       });
       document.getElementById('log').innerHTML += thisTime() + `: Claim (${id}) สำเร็จ !!! \n`;
-      //await startShip(id);
+      scrollTextarea();
     }
     catch(err) {
       console.log(err);
       document.getElementById('log').innerHTML += thisTime() + `: Claim (${id}) ไม่สำเร็จ ( ${err.message}) !!! \n`;
+      scrollTextarea();
     }
 }
 ////////////////////////////////////////////claim/////////////////////////////////////////
@@ -947,11 +952,13 @@ async function expedStart(id, land) {
         blocksBehind: 3,
         expireSeconds: 30
       });
-      document.getElementById('log').innerHTML += thisTime() + ": (" + id + ") ออกเรือใน Mode expeditions Land(" + land  +") แล้ว \n";       
+      document.getElementById('log').innerHTML += thisTime() + ": (" + id + ") ออกเรือใน Mode expeditions Land(" + land  +") แล้ว \n";  
+      scrollTextarea();     
     }
   catch(err) {
     console.log(err);
     document.getElementById('log').innerHTML += thisTime() + `: (${id}) ออกเรือ ล้มเหลว ( ${err.message} ) !!! \n`;
+    scrollTextarea();
   }         
 }
 
@@ -981,10 +988,12 @@ async function trawlsStart(id, token, x_cor, y_cor) {
         expireSeconds: 30
       });
         document.getElementById('log').innerHTML += thisTime() + `: (${id}) ออกเรือใน Mode Trawls พิกัด (${x_cor}/${y_cor}) token (${token}) แล้ว \n`; 
+        scrollTextarea();
       }
   catch(err) {
       console.log(err);
         document.getElementById('log').innerHTML += thisTime()+ `: (${id}) ออกเรือ ล้มเหลว !!! ( ${err.message} ) \n`;
+        scrollTextarea();
         }        
 }
 

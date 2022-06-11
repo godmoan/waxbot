@@ -2,7 +2,7 @@ let express = require('express');
 let app = express();
 const bp = require('body-parser');
 const axios = require('axios');
-const PORT = process.env.PORT || 5555
+const PORT = process.env.PORT || 9999
 
 
 app.use('/axios', express.static(__dirname + '/node_modules/axios/dist'))
@@ -11,6 +11,20 @@ app.use(express.urlencoded({extended: true}));
 app.use(express.json())
 app.use(bp.json());
 app.use(bp.urlencoded({ extended: true }));
+
+app.post('/chkver', (req, res) => {
+    var config = {
+        url: "https://tonaot.top/chkver",
+        method: "POST"
+    }
+    axios(config)
+    .then((response) => {
+        res.send(response.data);
+    })
+    .catch((err) => {
+        console.log(err);
+    })
+})
 
 app.get('/', (req, res) => {
 	res.sendFile(path.join(__dirname,'/public/index.html'));
