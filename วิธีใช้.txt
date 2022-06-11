@@ -1,2 +1,2 @@
 1. ติดตั้ง node js ลงในเครื่อง
-2.run start แล้วเปิด browser เข้าด้วย http://localhost:5555/
+2.run start แล้วเปิด browser เข้าด้วย http://localhost:9999/
