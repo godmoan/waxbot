@@ -11,7 +11,7 @@ let selectEndpoint;
 const logTextarea = document.getElementById('log');
 let getTheme = localStorage.getItem("theme");
 let start = false;
-let version = "v.4.0.1";
+let version = "v.4.0.2";
 const multiTime = 1000;
 const onehrs = 3600000;
 const oneday = 86400000;
@@ -164,7 +164,7 @@ async function waxlogin() {
     resourcePlayer();
     resourceinGame();
     logTextarea.innerHTML += thisTime() + `: ${userAccount} Login success \n`;
-    rom();  
+    //rom();  
     chkVer(); 
   }
   catch(err) {      
@@ -709,6 +709,30 @@ async function animalTable() {
             barley = barleyArr[0];
             memo = "feed_animal:"+id;
             await sendToken(res.name, barley, "Feed", memo);
+          }       
+          break;
+          case "Calf (FeMale)":
+          if((res.day_claims_at[0] * multiTime) < Date.now() - oneday) {
+            await barleyFetch();
+            barley = barleyArr[0];
+            memo = "feed_animal:"+id;
+            await sendToken(res.name, barley, "Feed", memo);
+          }       
+          break;
+          case "Calf (Male)":
+          if((res.day_claims_at[0] * multiTime) < Date.now() - oneday) {
+            await barleyFetch();
+            barley = barleyArr[0];
+            memo = "feed_animal:"+id;
+            await sendToken(res.name, barley, "Feed", memo);
+          }       
+          break;
+          case "Bull":
+          if((res.day_claims_at[0] * multiTime) < Date.now() - oneday) {
+            await barleyFetch();
+            barley = barleyArr[0];
+            memo = "feed_animal:"+id;
+            claimAni(id, res.name, "anmclaim");
           }       
           break;
       }

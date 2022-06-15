@@ -6,7 +6,7 @@ const logTextarea = document.getElementById('log');
 let getTheme = localStorage.getItem("theme");
 let start = false;
 let toolArr = [];
-let version = "1.0.1";
+let version = "1.0.2";
 const multiTime = 1000;
 const onehrs = 3600000;
 
@@ -77,24 +77,18 @@ async function countDown() {
 }
 
 function timeTrawl(id, claimHour, timeStart) { 
-  //loop = setInterval(() => {
     let sendTime = formatTime((timeStart * multiTime) + (claimHour * onehrs));
     document.getElementById('countDown'+id).innerHTML = `${sendTime.hours} : ${sendTime.minutes} :  ${sendTime.seconds}`;
-  //}, 1000);
 }
 
 function timeExp(id, duration, timeStart) {
-  //loop = setInterval(() => {
     let sendTime = formatTime((timeStart * multiTime) + (duration * multiTime));
     document.getElementById('countDown'+id).innerHTML = `${sendTime.hours} : ${sendTime.minutes} :  ${sendTime.seconds}`;
-  //}, 1000);
 }
 
 function timeOil(id, timeStart) {
-  //loop = setInterval(() => {
     let sendTime = formatTime((timeStart * multiTime) + (12 * onehrs));
     document.getElementById('countDown'+id).innerHTML = `${sendTime.hours} : ${sendTime.minutes} :  ${sendTime.seconds}`;
-  //}, 1000);
 }
 
 async function stopLoop() {
@@ -594,14 +588,17 @@ async function updateTool(getid) {
     if(id == getid) {
       await chkMode(id).then((mode) => {   //check mode from id
         getMode = mode;  
-        detail(id, getMode[0], getMode[1], getMode[2], dura, maxDura);       
-        let keyId = localStorage.getItem(id);
-        let obj = JSON.parse(keyId);
-        let startDay = new Date(getMode[0] * 1000).toLocaleString('en-US', { day: 'numeric' })
-        let startTime = new Date(getMode[0] * 1000).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
-        document.getElementById("dura"+id).innerText = `Durability: ${obj.durability}/${obj.maxDura}`;
-        document.getElementById("mode"+id).innerText = `${obj.mode}`;
-        document.getElementById("startTime"+id).innerText = `Start Time | วันที่ : ${startDay} เวลา : ${startTime}`;
+        detail(id, getMode[0], getMode[1], getMode[2], dura, maxDura);    
+        if(getMode[0] != "") {
+          let keyId = localStorage.getItem(id);
+          let obj = JSON.parse(keyId);
+          let startDay = new Date(getMode[0] * 1000).toLocaleString('en-US', { day: 'numeric' })
+          let startTime = new Date(getMode[0] * 1000).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
+          document.getElementById("dura"+id).innerText = `Durability: ${obj.durability}/${obj.maxDura}`;
+          document.getElementById("mode"+id).innerText = `${obj.mode}`;
+          document.getElementById("startTime"+id).innerText = `Start Time | วันที่ : ${startDay} เวลา : ${startTime}`;
+        }   
+        
       });  
     }
   }));
@@ -658,9 +655,32 @@ function duraFunc() {
     sleep(1000);
     duraFunc();
   }
-  
 }
 ////////////////////////////////////get durability//////////////////////////////////////////
+///////////////////////////////////////get dura////////////////////////////////////////////
+function dura(id) { 
+  try {
+    const listItem = wax.api.rpc.get_table_rows({
+      json: true,       
+      code: "sailorsworld",      
+      scope: "sailorsworld",         
+      table: "durabilities",       
+      key_type: "i64",
+      index_position: 1,
+      lower_bound: id,
+      upper_bound: id,
+      limit: 100,
+      reverse: false  
+      });
+      return listItem;
+  }
+  catch(err) {
+    console.log(err);
+    sleep(1000);
+    duraFunc();
+  }
+}
+///////////////////////////////////////get dura////////////////////////////////////////////
 /////////////////////////////////////player table///////////////////////////////////////////
 async function playerDetail() {
   const player = await wax.api.rpc.get_table_rows({
@@ -682,31 +702,42 @@ async function playerDetail() {
 async function mainBot() {
   await getTool();
   if(start == true) {
-    const listship = await duraFunc();
+    //const listship = await duraFunc();
     document.getElementById('inventory').innerHTML = "";
     try {
-      await Promise.all(listship.rows.map(async (element) => {
-        let id = element.asset_id;
-        let dura = element.durability;
-        let maxDura = element.max_durability;
-        let count = Math.floor(Math.random() * 10) + 1;
-        sleep(count * 2000);
-      await chkMode(id).then((mode) => {   //check mode from id
-        getMode = mode;  
-        detail(id, getMode[0], getMode[1], getMode[2], dura, maxDura);       
-        let keyId = localStorage.getItem(id);
-        let obj = JSON.parse(keyId);
-        let startDay = new Date(getMode[0] * 1000).toLocaleString('en-US', { day: 'numeric' })
-        let startTime = new Date(getMode[0] * 1000).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
-
-        document.getElementById('inventory').innerHTML += `<label class="btn btn-light" id="${id}" "style=width: 150px;">${id}</label>&emsp;&emsp;` +
-        `<label class="btn btn-dark" id="name${id}" style="width: 130px; color: #8B00DF">${obj.name}</label>&emsp;&emsp;` +
-        `<label class="btn btn-primary" id="rare${id}" style="width: 130px;">${obj.rare}</label>&emsp;&emsp;` +
-        `<label class="btn btn-light" id="dura${id}" style="width: 160px;">Durability: ${obj.durability}/${obj.maxDura}</label>&emsp;&emsp;` +
-        `<label class="btn btn-dark" id="mode${id}" style="width: 180px; color: #FC5D07">${obj.mode}</label>&emsp;&emsp;` +
-        `<label class="btn btn-light" id="startTime${id}" style="width: 250px;">Start Time | วันที่ : ${startDay} เวลา : ${startTime}</label>&emsp;&emsp;` +
-        `<label class="btn btn-dark" id="countDown${id}" style="width: 150px;"></label><br><br>`;   
-      });   
+      //await Promise.all(listship.rows.map(async (element) => {
+        await Promise.all(toolArr.map(async (elem) => {
+          await dura(elem)
+          .then((res) => {
+            let row = res.rows[0]
+            let id = row.asset_id;
+            let dura = row.durability;
+            let maxDura = row.max_durability;
+            let count = Math.floor(Math.random() * 10) + 1;
+            let arr = [id, dura, maxDura, count]
+            //sleep(count * 2000); 
+            return arr;          
+          })
+          .then((res) => {
+            //console.log(res);
+            chkMode(res[0]).then((mode) => {
+              getMode = mode;  
+              let id = res[0]
+              detail(id, getMode[0], getMode[1], getMode[2], res[1], res[2]);       
+              let keyId = localStorage.getItem(id);
+              let obj = JSON.parse(keyId);
+              let startDay = new Date(getMode[0] * 1000).toLocaleString('en-US', { day: 'numeric' })
+              let startTime = new Date(getMode[0] * 1000).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
+              
+              document.getElementById('inventory').innerHTML += `<label class="btn btn-light" id="${id}" "style=width: 150px;">${id}</label>&emsp;&emsp;` +
+              `<label class="btn btn-dark" id="name${id}" style="width: 130px; color: #8B00DF">${obj.name}</label>&emsp;&emsp;` +
+              `<label class="btn btn-primary" id="rare${id}" style="width: 130px;">${obj.rare}</label>&emsp;&emsp;` +
+              `<label class="btn btn-light" id="dura${id}" style="width: 160px;">Durability: ${obj.durability}/${obj.maxDura}</label>&emsp;&emsp;` +
+              `<label class="btn btn-dark" id="mode${id}" style="width: 180px; color: #FC5D07">${obj.mode}</label>&emsp;&emsp;` +
+              `<label class="btn btn-light" id="startTime${id}" style="width: 250px;">Start Time | วันที่ : ${startDay} เวลา : ${startTime}</label>&emsp;&emsp;` +
+              `<label class="btn btn-dark" id="countDown${id}" style="width: 150px;"></label><br><br>`;   
+            })
+          })
       }))
        document.getElementById('log').innerHTML += thisTime() + `: Connect Api done. \n`;
     }
@@ -1061,4 +1092,8 @@ async function alcorPrice() {
   })
 }
 //////////////////////////////////////////price///////////////////////////////////////////
-
+//////////////////////////////////////////delete//////////////////////////////////////////
+async function delShip(id) {
+  localStorage.removeItem(id)
+}
+//////////////////////////////////////////delete//////////////////////////////////////////
