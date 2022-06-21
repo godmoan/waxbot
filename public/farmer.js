@@ -11,7 +11,7 @@ let selectEndpoint;
 const logTextarea = document.getElementById('log');
 let getTheme = localStorage.getItem("theme");
 let start = false;
-let version = "v.4.0.2";
+let version = "v.4.0.3";
 const multiTime = 1000;
 const onehrs = 3600000;
 const oneday = 86400000;
@@ -28,10 +28,8 @@ let barleyArr = [];
 let text1 = "อ.ไม้ร่ม ได้ออกมาต้อนรับคุณ";
 let text2 = "ละละละละ เละๆๆๆ";
 let text3 = "ลุงเริง บ่นว่าเงี่ยน";
+let wax;
 
-const wax = new waxjs.WaxJS({
-  rpcEndpoint: 'https://chain.wax.io'
-});
 ///////////////////////////////////////variable////////////////////////////////////////
 ////////////////////////////////////////version////////////////////////////////////////
 document.getElementById("version").innerHTML = `Romsai Bot ${version}`;
@@ -150,9 +148,16 @@ function modalLoad() {
 let callbackBtn = document.querySelector("#saveModal");
 callbackBtn.addEventListener("click",async function() {
   selectEndpoint = document.getElementById("url").value;
-  await waxlogin();           
+  await waxStart();
+  await waxlogin();          
 })  
 ////////////////////////////////////endpoint///////////////////////////////////////////
+async function waxStart() {
+ wax = new waxjs.WaxJS({
+  //rpcEndpoint: 'https://wax.pink.gg'
+  rpcEndpoint: selectEndpoint
+});
+}
 //////////////////////////////////////wax login////////////////////////////////////////
 async function waxlogin() {
   try {
@@ -508,6 +513,8 @@ async function toolTable() {
         let timeStart = elem.next_availability;
         let timeProcess = (timeStart * multiTime) + ((obj.quan * memMultipy) * onehrs);
         if(timeProcess < Date.now()) {
+          let rand = Math.floor(Math.random() * 5) + 1;
+          sleep(1000 * rand);
           claimTool(elem.asset_id, toolnameObj[elem.asset_id], "claim");
         }
         }         
@@ -729,9 +736,9 @@ async function animalTable() {
           break;
           case "Bull":
           if((res.day_claims_at[0] * multiTime) < Date.now() - oneday) {
-            await barleyFetch();
-            barley = barleyArr[0];
-            memo = "feed_animal:"+id;
+            //await barleyFetch();
+            //barley = barleyArr[0];
+            //memo = "feed_animal:"+id;
             claimAni(id, res.name, "anmclaim");
           }       
           break;

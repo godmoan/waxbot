@@ -3,8 +3,9 @@ let app = express();
 const bp = require('body-parser');
 const axios = require('axios');
 const PORT = process.env.PORT || 9999
+//let cors = require('cors');
 
-
+//app.use(cors());
 app.use('/axios', express.static(__dirname + '/node_modules/axios/dist'))
 app.use(express.static(__dirname + '/Public')); //__dir and not _dir
 app.use(express.urlencoded({extended: true}));

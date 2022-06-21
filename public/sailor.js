@@ -9,10 +9,9 @@ let toolArr = [];
 let version = "1.0.2";
 const multiTime = 1000;
 const onehrs = 3600000;
+let wax;
 
-const wax = new waxjs.WaxJS({
-  rpcEndpoint: 'https://chain.wax.io'
-});
+
 
 setInterval(() => {
   coinmarketcapWax();
@@ -132,9 +131,17 @@ window.onload = async () => {
   let callbackBtn = document.querySelector("#saveModal");
   callbackBtn.addEventListener("click",async function() {
     selectEndpoint = document.getElementById("url").value;
+    await waxStart();
     await waxlogin();            
   })  
 ////////////////////////////////////endpoint///////////////////////////////////////////
+////////////////////////////////////endpoint///////////////////////////////////////////
+async function waxStart() {
+  wax = new waxjs.WaxJS({
+   //rpcEndpoint: 'https://wax.pink.gg'
+   rpcEndpoint: selectEndpoint
+ });
+ }
 //////////////////////////////////////wax login////////////////////////////////////////
   async function waxlogin() {
     try {
