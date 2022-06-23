@@ -146,10 +146,18 @@ function modalLoad() {
   }        
 }
 let callbackBtn = document.querySelector("#saveModal");
+let skipSetupBtn = document.querySelector("#skipSetup");
 callbackBtn.addEventListener("click",async function() {
   selectEndpoint = document.getElementById("url").value;
   await waxStart();
   await waxlogin();          
+})  
+
+skipSetupBtn.addEventListener("click",async function() {
+  selectEndpoint = document.getElementById("url").value;
+  await waxStart();
+  await waxlogin();   
+  await startBtn();       
 })  
 ////////////////////////////////////endpoint///////////////////////////////////////////
 async function waxStart() {
@@ -169,7 +177,7 @@ async function waxlogin() {
     resourcePlayer();
     resourceinGame();
     logTextarea.innerHTML += thisTime() + `: ${userAccount} Login success \n`;
-    //rom();  
+    rom();  
     chkVer(); 
   }
   catch(err) {      
