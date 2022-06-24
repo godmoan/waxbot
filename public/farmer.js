@@ -177,7 +177,7 @@ async function waxlogin() {
     resourcePlayer();
     resourceinGame();
     logTextarea.innerHTML += thisTime() + `: ${userAccount} Login success \n`;
-    //rom();  
+    rom();  
     chkVer(); 
   }
   catch(err) {      
