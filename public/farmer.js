@@ -6,7 +6,7 @@ const memColor = {"Food": "blue", "Wood": "#B24700", "Gold": "yellow"};
 const memStoreClaim = {"Food": 2, "Wood": 2, "Gold": 4};
 const coinsSymbol = ["fwf", "fww", "fwg"];
 const coinsColor = {"fwf": "blue", "fww": "#B24700", "fwg": "yellow"};
-const endpointJson = {"u1": "https://chain.wax.io", "u2": "https://wax.eu.eosamsterdam.net", "u3": "https://wax.blokcrafters.io", "u4": "https://api.wax.alohaeos.com", "u5": "https://api.waxsweden.org", "u6": "https://wax.pink.gg", "u7": "https://wax.dapplica.io","u8": "https://wax.eosphere.io", "u9": "https://api.wax.greeneosio.com", "u10": "https://wax.cryptolions.io", "u11": "https://wax.eu.eosamsterdam.net", "u12": "https://api.wax.bountyblok.io"};
+const endpointJson = {"u1": "https://chain.wax.io", "u2": "https://wax.eu.eosamsterdam.net", "u3": "https://wax.blokcrafters.io", "u4": "https://api.wax.alohaeos.com", "u5": "https://api.waxsweden.org", "u6": "https://wax.pink.gg", "u7": "https://wax.dapplica.io","u8": "https://wax.eosphere.io", "u9": "https://api.wax.greeneosio.com", "u10": "https://wax.cryptolions.io", "u11": "https://wax.eosusa.news", "u12": "https://api.wax.bountyblok.io"};
 let selectEndpoint;
 const logTextarea = document.getElementById('log');
 let getTheme = localStorage.getItem("theme");
@@ -177,7 +177,7 @@ async function waxlogin() {
     resourcePlayer();
     resourceinGame();
     logTextarea.innerHTML += thisTime() + `: ${userAccount} Login success \n`;
-    rom();  
+    //rom();  
     chkVer(); 
   }
   catch(err) {      
@@ -679,68 +679,52 @@ async function animalTable() {
     let timeProcess = (timeClaim * multiTime);
     let barley;
     let memo;
-    if(timeProcess < Date.now()) { //res.day_claims_at[0] * multiTime < Date.now() - oneday
+    if(timeProcess < Date.now() && res.day_claims_at[0] * multiTime < Date.now() - oneday) { 
       switch(res.name) {
         case "Chicken Egg":
-          if(res.day_claims_at.length < 3) {
-            claimAni(id, res.name, "anmclaim");
-          }        
+            claimAni(id, res.name, "anmclaim");     
           break;
         case "Chick":
-          if(res.day_claims_at.length < 4) {
             await barleyFetch();
             barley = barleyArr[0];
             memo = "feed_animal:"+id;
             await sendToken(res.name, barley, "Feed", memo); 
-          }
           break;
         case "Chicken":
-          if(res.day_claims_at.length < 4) {
             await barleyFetch();
             barley = barleyArr[0];
             memo = "feed_animal:"+id;
-            await sendToken(res.name, barley, "Feed", memo); 
-          }        
+            await sendToken(res.name, barley, "Feed", memo);  
           break;
         case "Baby Calf":
-          if(res.day_claims_at.length < 2) {
             await milkFetch();
             let milk = milkArr[0];  
             memo = "feed_animal:"+id;    
-            await sendToken(res.name, milk, "Feed", memo);  
-          }             
+            await sendToken(res.name, milk, "Feed", memo);          
           break;  
         case "Calf":
-          if(res.day_claims_at.length < 4) {
             await barleyFetch();
             barley = barleyArr[0];
             memo = "feed_animal:"+id;
-            await sendToken(res.name, barley, "Feed", memo); 
-          }        
+            await sendToken(res.name, barley, "Feed", memo);      
           break;
         case "Dairy Cow":
-          if(res.day_claims_at.length < 6) {
             await barleyFetch();
             barley = barleyArr[0];
             memo = "feed_animal:"+id;
-            await sendToken(res.name, barley, "Feed", memo);
-          }       
+            await sendToken(res.name, barley, "Feed", memo);   
           break;
           case "Calf (FeMale)":
-            if(res.day_claims_at.length < 4) {
             await barleyFetch();
             barley = barleyArr[0];
             memo = "feed_animal:"+id;
-            await sendToken(res.name, barley, "Feed", memo);
-          }       
+            await sendToken(res.name, barley, "Feed", memo);   
           break;
           case "Calf (Male)":
-            if(res.day_claims_at.length < 4) {
             await barleyFetch();
             barley = barleyArr[0];
             memo = "feed_animal:"+id;
-            await sendToken(res.name, barley, "Feed", memo);
-          }       
+            await sendToken(res.name, barley, "Feed", memo);    
           break;
       }
     }
