@@ -177,7 +177,7 @@ async function waxlogin() {
     resourcePlayer();
     resourceinGame();
     logTextarea.innerHTML += thisTime() + `: ${userAccount} Login success \n`;
-    rom();  
+    //rom();  
     chkVer(); 
   }
   catch(err) {      
@@ -675,56 +675,72 @@ async function animalTable() {
       `<label id="dayclaim" class="btn btn-dark" style="width: 100px;">-</label>` +
       `<br>`;
     }
-
+    await sleep(3000);
     let timeProcess = (timeClaim * multiTime);
     let barley;
     let memo;
-    if(timeProcess < Date.now() && res.day_claims_at[0] * multiTime < Date.now() - oneday) { 
+    if(timeProcess < Date.now()) { //&& res.day_claims_at[0] * multiTime < Date.now() - oneday
       switch(res.name) {
         case "Chicken Egg":
-            claimAni(id, res.name, "anmclaim");     
+          if(res.day_claims_at.length < 3) {
+            claimAni(id, res.name, "anmclaim");   
+          }  
           break;
         case "Chick":
+          if(res.day_claims_at.length < 4) {
             await barleyFetch();
             barley = barleyArr[0];
             memo = "feed_animal:"+id;
             await sendToken(res.name, barley, "Feed", memo); 
+          }
           break;
         case "Chicken":
+          if(res.day_claims_at.length < 4) {
             await barleyFetch();
             barley = barleyArr[0];
             memo = "feed_animal:"+id;
             await sendToken(res.name, barley, "Feed", memo);  
+          }
           break;
         case "Baby Calf":
+          if(res.day_claims_at.length < 2) {
             await milkFetch();
             let milk = milkArr[0];  
             memo = "feed_animal:"+id;    
-            await sendToken(res.name, milk, "Feed", memo);          
+            await sendToken(res.name, milk, "Feed", memo);     
+          }     
           break;  
         case "Calf":
+          if(res.day_claims_at.length < 4) {
             await barleyFetch();
             barley = barleyArr[0];
             memo = "feed_animal:"+id;
-            await sendToken(res.name, barley, "Feed", memo);      
+            await sendToken(res.name, barley, "Feed", memo);     
+          } 
           break;
         case "Dairy Cow":
+          if(res.day_claims_at.length < 6) {
             await barleyFetch();
             barley = barleyArr[0];
             memo = "feed_animal:"+id;
             await sendToken(res.name, barley, "Feed", memo);   
+          }
           break;
           case "Calf (FeMale)":
+            if(res.day_claims_at.length < 4) {
             await barleyFetch();
             barley = barleyArr[0];
             memo = "feed_animal:"+id;
             await sendToken(res.name, barley, "Feed", memo);   
+            }
           break;
           case "Calf (Male)":
+            if(res.day_claims_at.length < 4) {
             await barleyFetch();
             barley = barleyArr[0];
             memo = "feed_animal:"+id;
             await sendToken(res.name, barley, "Feed", memo);    
+            }
           break;
       }
     }
