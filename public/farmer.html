@@ -121,7 +121,7 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-lg-4">
+                    <div class="col-lg-3">
                         <div class="card">
                             <div class="card-body">
                                 <h4 class="card-title">Peerawat Setup</h4>
@@ -129,7 +129,7 @@
                                 <div id="listSetup"></div>
                                     <hr><br>  
                                     <h6>Repair & Refill (ตั้งไว้ ต่ำกว่ากี่ % ให้ทำงาน)</h6><br>
-                                    <p style="color: red;">* ถ้า ทองน้อย ให้ตั้งค่า repair 50 % ขึ้นไป*</p>
+                                    <p style="color: red;">* ถ้า ทองน้อย ให้ตั้งค่า repair 50 % ขึ้นไป *</p>
                                     <br>
                                     <div>  
                                         <div class="slider" style="display: flex;">
@@ -147,7 +147,13 @@
                                                 <input id="refillRange" type="range" min="5" max="100" value="30" step="1">
                                               </div>
                                         </div> 
-                                        <hr><br>                                    
+                                        <hr><br> 
+                                        <div id="withdrawn"></div>   
+                                        <hr><br> 
+                                        <div id="market"></div>   
+                                        <hr><br>            
+                                        <div id="atomicSetup"></div>   
+                                        <hr><br>                          
                                         <div id="theme" class="tabcontent">                             
                                             <a href="#" data-toggle="dropdown"><button class="btn btn-dark" style="color: #B231B6;"><i class="zmdi zmdi-refresh"></i>&emsp;เปลี่ยน Theme</button></a>                                       
                                             <div class="dropdown-menu dropdown-menu-right">
@@ -179,7 +185,7 @@
                             <div class="card-body">
                                 <h4 class="card-title">Log</h4>
                                 <hr><br>
-                                <textarea id="log" class="form-control" rows="20" cols="200" readonly style="line-height: 40px; opacity: 1;"></textarea>
+                                <textarea id="log" class="form-control" rows="25" cols="200" readonly style="line-height: 40px; opacity: 1;"></textarea>
                             </div>
                         </div>
                     </div>
@@ -216,6 +222,17 @@
                                 <div style="display: flex;">
                                     <button class="btn btn-dark" style="width: 150px;">FWG Coins</button>&emsp;<div id="fwgcoin"><div class="loading" data-text="loading…">loading…</div></div>
                                 </div><br>
+                                <hr>
+                                <h4 class="card-title">Inventory Atomic</h4>
+                                <div style="display: flex;">
+                                    <button class="btn btn-dark" style="width: 150px;">Milk</button>&emsp;<div id="invenMilk"><div class="loading" data-text="loading…">loading…</div></div>
+                                </div><br>
+                                <div style="display: flex;">
+                                    <button class="btn btn-dark" style="width: 150px;">Egg</button>&emsp;<div id="invenEgg"><div class="loading" data-text="loading…">loading…</div></div>
+                                </div><br>
+                                <div style="display: flex;">
+                                    <button class="btn btn-dark" style="width: 150px;">Barley</button>&emsp;<div id="invenBarley"><div class="loading" data-text="loading…">loading…</div></div>
+                                </div><br>
                             </div>
                         </div>
                         <div class="card">
@@ -244,6 +261,7 @@
                                 <div style="display: flex;">
                                     <button class="btn btn-dark" style="width: 150px;">Coins Stake</button>&emsp;<div id="coinstake"><div class="loading" data-text="loading…">loading…</div></div>
                                 </div><br>
+                                <hr>
                             </div>
                         </div>
 
@@ -263,10 +281,34 @@
     
                             </div>
                         </div>
+
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">Craft Silver Member</h4>
+                                <div style="color: red;">* ต้องไม่ติด 2fa Crafting *</div>
+                                <hr><br>
+                                <button id="btnSend" class="btn btn-success" onclick="craftMember()" style="display: block;">Craft</button>
+                                <br><br>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">Member Stuck in Farmers World</h4>
+                                <hr><br>
+                                <div id="showStuck"><div class="loading" data-text="loading…">loading…</div></div>
+                                <br>
+                                <div style="display: flex;">
+                                    <button id="btnSend" class="btn btn-primary btn--icon-text" onclick="showStuck()" style="display: block;">Refresh</button>&emsp;
+                                <button id="btnSend" class="btn btn-warning" onclick="stuckMember()" style="display: block;">Claim</button>
+                                </div>                              
+                                <br><br>
+                            </div>
+                        </div>
                    
                     </div>
 
-                    <div class="col-lg-5">
+                    <div class="col-lg-6">
                         <div class="card">
                             <div class="card-body">
                                 <h4 class="card-title">Mining(Tools)</h4>
@@ -303,11 +345,20 @@
                             </div>
                         </div>
 
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">Atomic Inventory</h4>
+                                แสดง 80 รายการล่าสุด Update ทุก 1 นาที
+                                <hr><br>
+                                <button id="btnSend" class="btn btn-primary" onclick="atomicInven()" style="display: block;">Refresh</button>
+                                <br>
+                                <div id="atomic"></div>
+                            </div>
+                        </div>
+
                     </div>
 
                 </div>
-
-
 
                 <div class="modal fade" id="modal-no-backdrop" data-backdrop="false" tabindex="-1">
                     <div class="modal-dialog">
@@ -349,11 +400,16 @@
                     <div class="modal-dialog modal-lg">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title pull-left">What's new V.4.0.1</h5>
+                                <h5 class="modal-title pull-left">What's new V.4.1.1</h5>
                             </div>
                             <div class="modal-body">
-                                - ตอนเลือก endpoint เลือกได้ว่า start เลย หรือเข้า setup<br><br>
-                                - แก้ bug ให้อาหารสัตว์เลี้ยง<br><br>
+                                - เพิ่มฟังก์ชั่น คราฟ Member ใน bot ได้<br><br>
+                                - กด unstuck ใน bot ได้ กรณีที่คราฟ member แล้วไม่ได้รับ Member (ปกติต้องเข้าไปกดรับในเกม)<br><br>
+                                - เพิ่มฟังก์ชั่น Withdraw ถอนทรัพยากรได้<br><br>
+                                - ซื้อ barley auto ถ้ามีน้อยกว่า 5 ต้น<br><br>
+                                - แสดง NFT จาก Atomichub ให้โชว์ใน bot<br><br>
+                                - แก้ resource แสดงผลผิดพลาด<br><br>
+                                - เพิ่ม delay ตอน claim tool ของเดิมจะ claim พร้อมกันทั้งหมด
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
@@ -364,7 +420,11 @@
 
 
                 <footer class="footer hidden-xs-down">
-                    <p>Donate 21dre.wam</p>
+                    <hr>
+                    <br>
+                    <p>บอททำมาใช้ฟรี ไม่อนุญาต ให้ใช้ในเชิงพาณิชย์</p><br>
+                    <p>Donate 21dre.wam</p><br><br>
+                    <input id="credit" type="checkbox">
                 </footer>
             </section>
         </main>

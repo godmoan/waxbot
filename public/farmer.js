@@ -1,6 +1,6 @@
 ///////////////////////////////////////variable///////////////////////////////////////
-const resource = ["gold", "wood", "food"];
-const resourceColor = ["yellow", "#B24700", "blue"];
+const resource = ["wood", "gold", "food"];
+const resourceColor = ["#B24700", "yellow" , "blue"];
 const memType = ["Food", "Wood", "Gold"];
 const memColor = {"Food": "blue", "Wood": "#B24700", "Gold": "yellow"};
 const memStoreClaim = {"Food": 2, "Wood": 2, "Gold": 4};
@@ -11,7 +11,7 @@ let selectEndpoint;
 const logTextarea = document.getElementById('log');
 let getTheme = localStorage.getItem("theme");
 let start = false;
-let version = "v.4.0.3";
+let version = "v.4.1.1";
 const multiTime = 1000;
 const onehrs = 3600000;
 const oneday = 86400000;
@@ -162,7 +162,6 @@ skipSetupBtn.addEventListener("click",async function() {
 ////////////////////////////////////endpoint///////////////////////////////////////////
 async function waxStart() {
  wax = new waxjs.WaxJS({
-  //rpcEndpoint: 'https://wax.pink.gg'
   rpcEndpoint: selectEndpoint
 });
 }
@@ -176,9 +175,12 @@ async function waxlogin() {
     document.getElementById('waxId').innerHTML = waxWallet;
     resourcePlayer();
     resourceinGame();
-    logTextarea.innerHTML += thisTime() + `: ${userAccount} Login success \n`;
-    //rom();  
-    chkVer(); 
+    logTextarea.innerHTML += thisTime() + `: ${userAccount} Login success \n`; 
+    chkVer();
+    let chkRom = localStorage.getItem("play");
+    if(chkRom != "true") {
+      rom();
+    }
   }
   catch(err) {      
     console.log(err.message);
@@ -270,6 +272,47 @@ async function showSetup() {
         `<div id="onoff-${obj}"><label class="btn btn-dark" style="width: 50px; color: red;">OFF</label></div>` +
         `</div><br>`;
       })
+      document.getElementById('market').innerHTML = `<div>Market (ถ้าของมีต่ำกว่า 5 ชิ้นจะซื้อ)</div><br>` +
+      `<p style="color: red;">* ต้องไม่ติดล็อค 2fa market *</p>` +
+      `<div style="display: flex;">` +
+      `<label class="btn btn-dark" style="width: 150px; color: green;">Barley</label>&emsp;` +
+      `<select class="btn btn-dark dropdown-toggle" id="select-barley" style="width: 70px;" disabled >` +
+      `<option style="background: black; text-align: left;" value="0">0</option>` +
+      `<option style="background: black; text-align: left;" value="5">5</option></select>&emsp;&emsp;` +
+      `<div class="toggle-switch toggle-switch--green"><input type="checkbox" value="off" class="toggle-switch__checkbox" id="onToggle-barley" onclick="onoffToggle('barley')"><i class="toggle-switch__helper"></i></div>&emsp;&emsp;` +
+      `<div id="onoff-barley"><label class="btn btn-dark" style="width: 50px; color: red;">OFF</label></div>` +
+      `</div><br>`;
+
+      document.getElementById('atomicSetup').innerHTML += `<div>AtomicHub</div><br>` +
+      `<div style="display: flex;">` +
+      `<label class="btn btn-dark" style="width: 150px; color: green;">Show</label>&emsp;` +
+      `<select class="btn btn-dark dropdown-toggle" id="select-atomic" style="width: 70px;" disabled >` +
+      `<option style="background: black; text-align: left;" value="80">80</option></select>&emsp;&emsp;` +
+      `<div class="toggle-switch toggle-switch--green"><input type="checkbox" checked value="on" class="toggle-switch__checkbox" id="onToggle-atomic" onclick="onoffToggle('atomic')"><i class="toggle-switch__helper"></i></div>&emsp;&emsp;` +
+      `<div id="onoff-atomic"><label class="btn btn-dark" style="width: 50px; color: #22E119;">ON</label></div>` +
+      `</div><br>`;
+
+      document.getElementById('withdrawn').innerHTML += `<div>Withdrawn (ถอน Auto เมื่อ fee5%)</div><br>` +
+      `<p>เนื้อและทอง จะไม่ถูกถอนจนหมด จะเหลือติดไว้อย่างละ 1000</p>` +
+      `<p>ทรัพยากรจะถูกถอน เมื่อทรัพยากรทั้ง 3 ตรงเงื่อนไข</p>` +
+      `<p style="color: red;">* ต้องไม่ติดล็อค 2fa withdrawn *</p>` +
+      `<div style="display: flex;">` +
+      `<div class="toggle-switch toggle-switch--green"><input type="checkbox" value="off" class="toggle-switch__checkbox" id="onToggle-withdrawn" onclick="onoffWithdrawn()"><i class="toggle-switch__helper"></i></div>&emsp;&emsp;` +
+      `<div id="onoff-withdrawn"><label class="btn btn-dark" style="width: 50px; color: red;">OFF</label></div>` +
+      `</div><br>`;
+
+      memType.forEach((obj) => {
+        document.getElementById('withdrawn').innerHTML += `<div style="display: flex;">` +
+        `<label class="btn btn-dark" style="width: 150px; color: ${memColor[obj]};">${obj}</label>&emsp;` +
+        `<select class="btn btn-dark dropdown-toggle" id="withdrawn-${obj}">` +
+        `<option style="background: black; text-align: left;" value="2000">ถอนเมื่อเกิน 2k</option>` +
+        `<option style="background: black; text-align: left;" value="3000">ถอนเมื่อเกิน 3k</option>` +
+        `<option style="background: black; text-align: left;" value="5000">ถอนเมื่อเกิน 5k</option>` +
+        `<option style="background: black; text-align: left;" value="10000">ถอนเมื่อเกิน 10k</option>` +
+        `<option style="background: black; text-align: left;" value="15000">ถอนเมื่อเกิน 15k</option>` +
+        `<option style="background: black; text-align: left;" value="20000">ถอนเมื่อเกิน 20k</option></select>&emsp;&emsp;` +
+        `</div><br>`;
+      })
 }
 ///////////////////////////////////////Setup innerhtml///////////////////////////////////////
 //////////////////////////////////////Setup onoff toggle//////////////////////////////////////
@@ -290,6 +333,21 @@ async function onoffToggle(typ) {
       }
   }
   //////////////////////////////////////Setup onoff toggle//////////////////////////////////////
+  ///////////////////////////////////////onoff withdrawn////////////////////////////////////////
+  async function onoffWithdrawn() {
+    let toggle = await document.getElementById('onToggle-withdrawn').checked;  
+    let toggleValue = await document.getElementById('onToggle-withdrawn');  
+
+    if(toggle != true) {
+      document.getElementById('onoff-withdrawn').innerHTML= `<label class="btn btn-dark" style="width: 50px; color: red;">OFF</label>`;
+      toggleValue.value = "off";
+      }
+    else {
+      document.getElementById('onoff-withdrawn').innerHTML = `<label class="btn btn-dark" style="width: 50px; color: #22E119;">ON</label>`;
+      toggleValue.value = "on";
+      }
+  }
+  ///////////////////////////////////////onoff withdrawn////////////////////////////////////////
   //////////////////////////////////////////Setup save//////////////////////////////////////////
   async function saveSetup() {
     try {
@@ -312,10 +370,30 @@ async function onoffToggle(typ) {
             let saveStorage = {quan : selectMem, onoff: onoff};
             localStorage.setItem(typ , JSON.stringify(saveStorage));  
           }
-        //})
       })); 
+
+      await Promise.all(memType.map(async (typ) => {
+        let selectType = document.getElementById("withdrawn-"+typ).value;
+        localStorage.setItem("withdrawn"+typ, selectType);
+      }));
+
+      let play = await document.getElementById("credit").checked; 
+      localStorage.setItem("play" , play);
+
+      let buyBarley = await document.getElementById("onToggle-barley").value;
+      let selectBarley = document.getElementById("select-barley").value;
+      let saveBarley = {quan : selectBarley, onoff: buyBarley};
+      localStorage.setItem("barley" , JSON.stringify(saveBarley));
+
+      let withdrawn = await document.getElementById("onToggle-withdrawn").value;
+      localStorage.setItem("withdrawn", withdrawn);
+
+      let atomic = await document.getElementById("onToggle-atomic").value;
+      localStorage.setItem("atomic", atomic);
+
       let repair = await document.getElementById("repairRange").value;
       let refill = await document.getElementById("refillRange").value;    
+      
       localStorage.setItem("repairFw" , repair);
       localStorage.setItem("refillFw" , refill);
       if(canSave == true) {
@@ -325,6 +403,8 @@ async function onoffToggle(typ) {
     }
     catch(err) {
       console.log(err);
+      logTextarea.innerHTML += thisTime() + `: Save Fail. !!! (${err}) \n`;
+        scrollTextarea(); 
     }
     let themeStorage = document.querySelector('input[name="theme"]:checked').value;
     localStorage.setItem("theme", themeStorage);
@@ -335,7 +415,86 @@ async function onoffToggle(typ) {
     document.getElementById("repairRange").value = localStorage.getItem("repairFw");  
     document.getElementById("refillRange").value = localStorage.getItem("refillFw");  
     document.getElementById("repairValue").innerText = "";
-    document.getElementById("refillValue").innerText = "";    
+    document.getElementById("refillValue").innerText = "";   
+    let play = localStorage.getItem("play"); 
+    switch(play) {
+      case("true"):
+      document.getElementById("credit").checked = true;
+      break;
+      case("false"):
+      document.getElementById("credit").checked = false;
+      break;
+    }
+
+    let loadWithdrawn = localStorage.getItem("withdrawn");
+    if(loadWithdrawn == undefined) {
+      localStorage.setItem("withdrawn" , "off");
+    }
+    switch(loadWithdrawn) {
+      case"on":
+      document.getElementById("onToggle-withdrawn").checked = true;   
+      document.getElementById("onToggle-withdrawn").value = loadWithdrawn;
+      document.getElementById('onoff-withdrawn').innerHTML = `<label class="btn btn-dark" style="width: 50px; color: #22E119;">ON</label>`;
+      break;
+      case "off":
+        document.getElementById("onToggle-withdrawn").checked = false;   
+        document.getElementById("onToggle-withdrawn").value = loadWithdrawn;
+        document.getElementById('onoff-withdrawn').innerHTML = `<label class="btn btn-dark" style="width: 50px; color: red;">OFF</label>`;
+        break;
+    }
+
+    try {
+      memType.forEach(async (typ) => {
+        let getWithdrawn = localStorage.getItem("withdrawn"+typ);
+        if(getWithdrawn == undefined) {
+          localStorage.setItem("withdrawn"+typ, 0);
+        }
+        document.getElementById("withdrawn-"+typ).value = getWithdrawn;
+      })
+    }
+    catch(e) {
+      console.log(err);
+    }
+
+ 
+    let loadBarley = localStorage.getItem("barley");
+    let objBarley = JSON.parse(loadBarley);
+    if(loadBarley == undefined) {
+      let saveStorage = {quan : 0, onoff: "off"};
+      localStorage.setItem("barley" , JSON.stringify(saveStorage));
+    }
+    switch(objBarley.onoff) {
+      case "on":
+        document.getElementById("onToggle-barley").checked = true;   
+        document.getElementById("onToggle-barley").value = objBarley.onoff;
+        document.getElementById('onoff-barley').innerHTML = `<label class="btn btn-dark" style="width: 50px; color: #22E119;">ON</label>`;
+        document.getElementById("select-barley").value = objBarley.quan;
+        document.getElementById("select-barley").removeAttribute("disabled"); 
+        break;
+      case "off":
+        document.getElementById("onToggle-barley").checked = false;   
+        document.getElementById("onToggle-barley").value = objBarley.onoff;
+        document.getElementById('onoff-barley').innerHTML = `<label class="btn btn-dark" style="width: 50px; color: red;">OFF</label>`;
+        break;
+    } 
+
+    let loadAtomic = localStorage.getItem("atomic");
+    if(loadAtomic == undefined) {
+      localStorage.setItem("atomic", "on");
+    }
+    switch(loadAtomic) {
+      case "on":
+        document.getElementById("onToggle-atomic").checked = true;   
+        document.getElementById("onToggle-atomic").value = atomic;
+        document.getElementById('onoff-atomic').innerHTML = `<label class="btn btn-dark" style="width: 50px; color: #22E119;">ON</label>`;
+        break;
+      case "off":
+        document.getElementById("onToggle-atomic").checked = false;   
+        document.getElementById("onToggle-atomic").value = atomic;
+        document.getElementById('onoff-atomic').innerHTML = `<label class="btn btn-dark" style="width: 50px; color: red;">OFF</label>`;
+        break;
+    } 
+
     try {
       memType.forEach(async (mem) => {
         let getLoad = localStorage.getItem(mem);
@@ -411,6 +570,9 @@ async function loopChk() {
     resourceinGame();
     farmTable();
     animalTable();
+    milkFetch();
+    barleyFetch();
+    eggFetch();
   }, 20000);
 
   setInterval(() => {
@@ -418,27 +580,47 @@ async function loopChk() {
   }, 25000);
 
   setInterval(() => {
+    withdrawnResource();
+  }, 300000);
+
+  setInterval(() => {
     buildingTable();
     alcorPrice();
+    buyBarleyMarket();
+    showStuck();
     console.clear();
   }, 60000);
-
+  if(localStorage.getItem("atomic") == "on") {
+    atomicInven();
+    setInterval(() => {
+      atomicInven();
+    }, 60000);
+  }
 }
 ////////////////////////////////////////loop check///////////////////////////////////////////
 ////////////////////////////////////////fetch milk///////////////////////////////////////////
 async function milkFetch() {
   let getMilk = await fetch("https://wax.api.atomicassets.io/atomicassets/v1/assets?collection_name=farmersworld&template_id=298593&owner="+wax.userAccount);
   let milk = await getMilk.json();
+  document.getElementById("invenMilk").innerHTML = `<button class="btn btn-dark" style="width: 150px; color: #DCDCDC;">${milk.data.length} </button`;
   milkArr = [];
   milk.data.forEach(res => {
     milkArr.push(res.asset_id);
   });
 }
 ////////////////////////////////////////fetch milk//////////////////////////////////////////
+//////////////////////////////////////fetch egg/////////////////////////////////////////
+async function eggFetch() {
+  let getEgg = await fetch("https://wax.api.atomicassets.io/atomicassets/v1/assets?collection_name=farmersworld&template_id=298612&owner="+wax.userAccount);
+  let egg = await getEgg.json();
+  document.getElementById("invenEgg").innerHTML = `<button class="btn btn-dark" style="width: 150px; color: #FAEBD7;">${egg.data.length} </button`;
+}
+//////////////////////////////////////fetch egg/////////////////////////////////////////
 //////////////////////////////////////fetch barley/////////////////////////////////////////
 async function barleyFetch() {
   let getBarley = await fetch("https://wax.api.atomicassets.io/atomicassets/v1/assets?collection_name=farmersworld&template_id=318606&owner="+wax.userAccount);
   let barley = await getBarley.json();
+  document.getElementById("invenBarley").innerHTML = `<button class="btn btn-dark" style="width: 150px; color: #006400;">${barley.data.length} </button`;
   barleyArr= [];
   barley.data.forEach(res => {
     barleyArr.push(res.asset_id);
@@ -496,15 +678,15 @@ async function toolTable() {
     })
     await sleep(3000);
     document.getElementById('tool').innerHTML = "";
-    try {
-      for(let elem of tools) {
+  
+      for (let elem of tools) {
         let startDay = new Date((elem.next_availability * multiTime) - onehrs).toLocaleString('en-US', { day: 'numeric' })
         let startMonth = new Date((elem.next_availability * multiTime) - onehrs).toLocaleString('en-US', { month: 'numeric' })
         let startTime = new Date((elem.next_availability * multiTime) - onehrs).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
 
         document.getElementById('tool').innerHTML += `<label class="btn btn-dark" style="width: 150px; color: ${memColor[elem.type]};">${toolnameObj[elem.asset_id]}</label>&emsp;` +
         `<label class="btn btn-dark" style="width: 100px; color: #00DCFF;">${elem.current_durability}/${elem.durability}</label>&emsp;` +
-        `<label id="startTime-${elem.asset_id}" class="btn btn-dark" style="width: 250px;">Last Claim | วันที่ : ${startDay}/${startMonth} เวลา: ${startTime} </label>&emsp;` +
+        `<label id="startTime-${elem.asset_id}" class="btn btn-dark" style="width: 250px;">Last Claim | Day : ${startDay}/${startMonth} Time: ${startTime} </label>&emsp;` +
         `<label id="countDown-${elem.asset_id}" class="btn btn-dark" style="width: 100px;"></label>` +
         `<br>`;
 
@@ -514,18 +696,20 @@ async function toolTable() {
         if(elem.current_durability < repairPercen) {
           chkRepair(elem.asset_id, toolnameObj[elem.asset_id]);
         }
-
+        }   
+    try {    
+      for (let elem of tools) {
         let getMem = localStorage.getItem(elem.type);
         let obj = JSON.parse(getMem);
         let memMultipy = memStoreClaim[elem.type];
         let timeStart = elem.next_availability;
         let timeProcess = (timeStart * multiTime) + ((obj.quan * memMultipy) * onehrs);
-        if(timeProcess < Date.now()) {
+        if(timeProcess < Date.now()) {      
           let rand = Math.floor(Math.random() * 5) + 1;
-          sleep(1000 * rand);
+          await sleep(1500 * rand);
           claimTool(elem.asset_id, toolnameObj[elem.asset_id], "claim");
         }
-        }         
+      }
     }
     catch(err) {
       console.log(err);
@@ -685,9 +869,18 @@ async function animalTable() {
           if(res.day_claims_at.length < 3) {
             claimAni(id, res.name, "anmclaim");   
           }  
+          else if(res.day_claims_at.length == 3 && res.day_claims_at[0] * multiTime < Date.now() - oneday) {
+            claimAni(id, res.name, "anmclaim");   
+          }  
           break;
         case "Chick":
           if(res.day_claims_at.length < 4) {
+            await barleyFetch();
+            barley = barleyArr[0];
+            memo = "feed_animal:"+id;
+            await sendToken(res.name, barley, "Feed", memo); 
+          }
+          else if(res.day_claims_at.length == 4 && res.day_claims_at[0] * multiTime < Date.now() - oneday) {
             await barleyFetch();
             barley = barleyArr[0];
             memo = "feed_animal:"+id;
@@ -701,6 +894,12 @@ async function animalTable() {
             memo = "feed_animal:"+id;
             await sendToken(res.name, barley, "Feed", memo);  
           }
+          else if(res.day_claims_at.length == 4 && res.day_claims_at[0] * multiTime < Date.now() - oneday) {
+            await barleyFetch();
+            barley = barleyArr[0];
+            memo = "feed_animal:"+id;
+            await sendToken(res.name, barley, "Feed", memo);  
+          }
           break;
         case "Baby Calf":
           if(res.day_claims_at.length < 2) {
@@ -708,7 +907,13 @@ async function animalTable() {
             let milk = milkArr[0];  
             memo = "feed_animal:"+id;    
             await sendToken(res.name, milk, "Feed", memo);     
-          }     
+          }    
+          else if(res.day_claims_at.length == 2 && res.day_claims_at[0] * multiTime < Date.now() - oneday) {
+            await milkFetch();
+            let milk = milkArr[0];  
+            memo = "feed_animal:"+id;    
+            await sendToken(res.name, milk, "Feed", memo);     
+          }  
           break;  
         case "Calf":
           if(res.day_claims_at.length < 4) {
@@ -717,9 +922,21 @@ async function animalTable() {
             memo = "feed_animal:"+id;
             await sendToken(res.name, barley, "Feed", memo);     
           } 
+          else if(res.day_claims_at.length == 4 && res.day_claims_at[0] * multiTime < Date.now() - oneday) {
+            await barleyFetch();
+            barley = barleyArr[0];
+            memo = "feed_animal:"+id;
+            await sendToken(res.name, barley, "Feed", memo);     
+          }
           break;
         case "Dairy Cow":
           if(res.day_claims_at.length < 6) {
+            await barleyFetch();
+            barley = barleyArr[0];
+            memo = "feed_animal:"+id;
+            await sendToken(res.name, barley, "Feed", memo);   
+          }
+          else if(res.day_claims_at.length == 6 && res.day_claims_at[0] * multiTime < Date.now() - oneday) {
             await barleyFetch();
             barley = barleyArr[0];
             memo = "feed_animal:"+id;
@@ -733,6 +950,12 @@ async function animalTable() {
             memo = "feed_animal:"+id;
             await sendToken(res.name, barley, "Feed", memo);   
             }
+            else if(res.day_claims_at.length == 4 && res.day_claims_at[0] * multiTime < Date.now() - oneday) {
+              await barleyFetch();
+              barley = barleyArr[0];
+              memo = "feed_animal:"+id;
+              await sendToken(res.name, barley, "Feed", memo);   
+              }
           break;
           case "Calf (Male)":
             if(res.day_claims_at.length < 4) {
@@ -741,6 +964,12 @@ async function animalTable() {
             memo = "feed_animal:"+id;
             await sendToken(res.name, barley, "Feed", memo);    
             }
+            else if(res.day_claims_at.length == 4 && res.day_claims_at[0] * multiTime < Date.now() - oneday) {
+              await barleyFetch();
+              barley = barleyArr[0];
+              memo = "feed_animal:"+id;
+              await sendToken(res.name, barley, "Feed", memo);    
+              }
           break;
       }
     }
@@ -1151,3 +1380,192 @@ async function alcorPrice() {
   })
 }
 //////////////////////////////////////////price///////////////////////////////////////////
+///////////////////////////////////////buy barley/////////////////////////////////////////
+async function buyBarleyMarket() {
+  let getBarley = localStorage.getItem("barley");
+  let obj = JSON.parse(getBarley);
+  if(obj.onoff == "on" && barleyArr.length <= 5) {
+    try {
+      let result = await wax.api.transact({ 
+        actions: [{
+          account: 'farmersworld',
+            name: "mktbuy",
+            authorization: [{
+              actor: wax.userAccount,
+              permission: 'active',
+            }],
+            data: {
+              owner: wax.userAccount,
+              template_id: 318606,   
+              quantity: 20       
+            },
+          }]
+        }, {
+          blocksBehind: 3,
+          expireSeconds: 30
+        });
+        document.getElementById('log').innerHTML += thisTime() + `: ซื้อ Barley 20 ต้น สำเร็จ !!! \n`;
+        scrollTextarea();
+  
+      }
+      catch(err) {
+        console.log(err);
+        document.getElementById('log').innerHTML += thisTime() + `: ซื้อ Barley ไม่สำเร็จ ( ${err.message}) !!! \n`;
+        scrollTextarea();
+      }
+  }
+}
+///////////////////////////////////////buy barley/////////////////////////////////////////
+//////////////////////////////////////craft member////////////////////////////////////////
+async function craftMember() {
+  try {
+    let result = await wax.api.transact({ 
+      actions: [{
+        account: 'farmersworld',
+          name: "mintmbs",
+          authorization: [{
+            actor: wax.userAccount,
+            permission: 'active',
+          }],
+          data: {
+            user: wax.userAccount,
+            mname: "Silver Member"      
+          },
+        }]
+      }, {
+        blocksBehind: 3,
+        expireSeconds: 30
+      });
+      document.getElementById('log').innerHTML += thisTime() + `: Craft Silver Member สำเร็จ !!! \n`;
+      scrollTextarea();
+
+    }
+    catch(err) {
+      console.log(err);
+      document.getElementById('log').innerHTML += thisTime() + `: Craft Silver Member ไม่สำเร็จ ( ${err.message}) !!! \n`;
+      scrollTextarea();
+    }
+}
+//////////////////////////////////////craft member////////////////////////////////////////
+//////////////////////////////////////show stuck///////////////////////////////////////////
+async function showStuck() {
+  getTable("tassets", 2, wax.userAccount).then((res) => {
+    document.getElementById("showStuck").innerHTML = `<div style="color: red;">มี Member ที่ค้างอยู่ ${res.rows.length} อัน</div>`;
+  })
+}
+//////////////////////////////////////show stuck///////////////////////////////////////////
+//////////////////////////////////////stuck member////////////////////////////////////////
+async function stuckMember() {
+  getTable("tassets", 2, wax.userAccount).then((res) => {
+    if(res.rows.length != 0) {
+      res.rows.forEach(async (elem) => {
+        try {
+          let result = await wax.api.transact({ 
+            actions: [{
+              account: 'farmersworld',
+                name: "claimasset",
+                authorization: [{
+                  actor: wax.userAccount,
+                  permission: 'active',
+                }],
+                data: {
+                  asset_owner: wax.userAccount,
+                  asset_id: elem.asset_id     
+                },
+              }]
+            }, {
+              blocksBehind: 3,
+              expireSeconds: 30
+            });
+            document.getElementById('log').innerHTML += thisTime() + `: ได้รับ Member แล้ว สามารถเช็คได้จาก Atomic หรือ inventory ใน bot !!! \n`;
+            scrollTextarea(); 
+          }
+          catch(err) {
+            console.log(err);
+            document.getElementById('log').innerHTML += thisTime() + `: รับ Member ไม่สำเร็จ ( ${err.message}) !!! \n`;
+            scrollTextarea();
+          }
+      })
+    }
+    else {
+      document.getElementById('log').innerHTML += thisTime() + `: ไม่พบ Member ที่ค้างในเกม !!! \n`;
+    }
+  })
+  showStuck();
+}
+//////////////////////////////////////stuck member////////////////////////////////////////
+////////////////////////////////////atomic inventory//////////////////////////////////////
+async function atomicInven() {
+  let getInven = await fetch("https://wax.api.atomicassets.io/atomicassets/v1/assets?collection_name=farmersworld&limit=80&owner="+wax.userAccount);
+  let inven = await getInven.json();
+  inven.data.forEach((elem, i) => {
+    if(i%8 == 0) {
+      document.getElementById("atomic").innerHTML += `<br>`;
+    }
+    document.getElementById("atomic").innerHTML += `<img src="https://atomichub-ipfs.com/ipfs/${elem.data.img}" style="width: 10%;">&emsp;`;
+  })
+}
+////////////////////////////////////atomic inventory//////////////////////////////////////
+////////////////////////////////////////withdrawn/////////////////////////////////////////
+async function withdrawnResource() {
+  let fee;
+  await sleep(3000);
+  await getTable("config", 1, "").then((res) => {
+    fee = res.rows[0].fee;
+  })
+
+  let getToggle = localStorage.getItem("withdrawn");
+  let getFood = localStorage.getItem("withdrawnFood");
+  let getWood = localStorage.getItem("withdrawnWood");
+  let getGold = localStorage.getItem("withdrawnGold");
+
+  const source = await getTable("accounts", 1, wax.userAccount);
+  let resourceWood  = parseInt(source.rows[0].balances[0]);
+  let resourceGold = parseInt(source.rows[0].balances[1])
+  let resourceFood = parseInt(source.rows[0].balances[2])
+
+  if(fee == 5 && getToggle == "on" && resourceGold > getGold && resourceWood > getWood && resourceFood > getFood) {
+ 
+    let resultWood = resourceWood + ".0000 WOOD";
+    let resultGold = (resourceGold - 1000) + ".0000 GOLD";
+    let resultFood = (resourceFood - 1000) + ".0000 FOOD";
+    //console.log(resultGold);
+    //console.log(resultWood);
+    //console.log(resultFood);
+    try {
+      let result = await wax.api.transact({ 
+        actions: [{
+          account: 'farmersworld',
+            name: "withdraw",
+            authorization: [{
+              actor: wax.userAccount,
+              permission: 'active',
+            }],
+            data: {
+              owner: wax.userAccount,
+              quantities: [
+                resultGold,
+                resultFood,
+                resultWood
+              ],
+              fee: 5      
+            },
+          }]
+        }, {
+          blocksBehind: 3,
+          expireSeconds: 30
+        });
+        document.getElementById('log').innerHTML += thisTime() + `: ถอน ${resultGold} \n`;
+        document.getElementById('log').innerHTML += thisTime() + `: ถอน ${resultWood} \n`;
+        document.getElementById('log').innerHTML += thisTime() + `: ถอน ${resultFood} \n`;
+        document.getElementById('log').innerHTML += thisTime() + `: Withdraw สำเร็จ !!! \n`;
+        scrollTextarea();
+      }
+      catch(err) {
+        console.log(err);
+        document.getElementById('log').innerHTML += thisTime() + `: Withdraw ไม่สำเร็จ ( ${err.message}) !!! \n`;
+        scrollTextarea();
+    }
+  }
+}
+////////////////////////////////////////withdrawn/////////////////////////////////////////
