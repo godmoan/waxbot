@@ -255,6 +255,7 @@ async function fetchCoin(coin) {
 ///////////////////////////////////resource in game///////////////////////////////////
 async function resourceinGame() {
   const source = await getTable("accounts", 1, wax.userAccount);
+  typeArray = [];
   for(let i = 0; i <= 2; i++) {
     let getResource = source.rows[0].balances[i];
     let cutResource = getResource.replace(/[0-9|.|\s]/g, '');
@@ -1582,6 +1583,8 @@ async function withdrawnResource() {
         console.log(err);
         document.getElementById('log').innerHTML += thisTime() + `: Withdraw ไม่สำเร็จ ( ${err.message}) !!! \n`;
         scrollTextarea();
+        sleep(20000);
+        withdrawnResource()
     }
   }
 }
