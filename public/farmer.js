@@ -1544,8 +1544,7 @@ async function withdrawnResource() {
   let getGold = localStorage.getItem("withdrawnGold");
 
 
-  //if(fee == 5 && getToggle == "on" && foodIngame > getFood && woodIngame > getWood && goldIngame > getGold) {
-    if(getToggle == "on" && foodIngame > getFood && woodIngame > getWood && goldIngame > getGold) {
+  if(fee == 5 && getToggle == "on" && foodIngame > getFood && woodIngame > getWood && goldIngame > getGold) {
     let resultWood = woodIngame + ".0000 WOOD";
     let resultGold = (goldIngame - 1000) + ".0000 GOLD";
     let resultFood = (foodIngame - 1000) + ".0000 FOOD";
