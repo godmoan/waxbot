@@ -29,6 +29,11 @@ let text1 = "อ.ไม้ร่ม ได้ออกมาต้อนรั�
 let text2 = "ละละละละ เละๆๆๆ";
 let text3 = "ลุงเริง บ่นว่าเงี่ยน";
 let wax;
+let typeArray = [];
+let woodIngame;
+let foodIngame;
+let goldIngame;
+
 
 ///////////////////////////////////////variable////////////////////////////////////////
 ////////////////////////////////////////version////////////////////////////////////////
@@ -250,15 +255,34 @@ async function fetchCoin(coin) {
 ///////////////////////////////////resource in game///////////////////////////////////
 async function resourceinGame() {
   const source = await getTable("accounts", 1, wax.userAccount);
-  for(let i = 1; i <= resourceColor.length; i++) {
-    document.getElementById(resource[i-1] + "token").innerHTML = `<button class="btn btn-dark" style="width: 150px; color: ${resourceColor[i-1]};">${source.rows[0].balances[i-1]}</button>`;
+  for(let i = 0; i <= 2; i++) {
+    let getResource = source.rows[0].balances[i];
+    let cutResource = getResource.replace(/[0-9|.|\s]/g, '');
+    typeArray.push(cutResource);
   }
+
+  typeArray.forEach((elem, i) => {
+    switch(elem) {
+      case "WOOD":
+        woodIngame = parseInt(source.rows[0].balances[i]);
+        document.getElementById("woodtoken").innerHTML = `<button class="btn btn-dark" style="width: 150px; color: #B24700;">${woodIngame}</button>`;
+        break;
+      case "FOOD":
+        foodIngame = parseInt(source.rows[0].balances[i]);
+        document.getElementById("foodtoken").innerHTML = `<button class="btn btn-dark" style="width: 150px; color: blue;">${foodIngame}</button>`;
+        break;
+      case "GOLD":
+        goldIngame = parseInt(source.rows[0].balances[i]);
+        document.getElementById("goldtoken").innerHTML = `<button class="btn btn-dark" style="width: 150px; color: yellow;">${goldIngame}</button>`;
+        break;
+    }
+  });
+
   await getTable("coinstake", 1, wax.userAccount).then((res) => {
     document.getElementById('coinstake').innerHTML = `<button class="btn btn-dark" style="width: 150px; color:#FF00C9;">${res.rows[0].amount} coins</button>`;   
   }) 
 }
 ///////////////////////////////////resource in game///////////////////////////////////
-
 ///////////////////////////////////////Setup innerhtml/////////////////////////////////////
 async function showSetup() {
       memType.forEach((obj) => {
@@ -1519,19 +1543,13 @@ async function withdrawnResource() {
   let getWood = localStorage.getItem("withdrawnWood");
   let getGold = localStorage.getItem("withdrawnGold");
 
-  const source = await getTable("accounts", 1, wax.userAccount);
-  let resourceWood  = parseInt(source.rows[0].balances[0]);
-  let resourceGold = parseInt(source.rows[0].balances[1])
-  let resourceFood = parseInt(source.rows[0].balances[2])
 
-  if(fee == 5 && getToggle == "on" && resourceGold > getGold && resourceWood > getWood && resourceFood > getFood) {
- 
-    let resultWood = resourceWood + ".0000 WOOD";
-    let resultGold = (resourceGold - 1000) + ".0000 GOLD";
-    let resultFood = (resourceFood - 1000) + ".0000 FOOD";
-    //console.log(resultGold);
-    //console.log(resultWood);
-    //console.log(resultFood);
+  //if(fee == 5 && getToggle == "on" && foodIngame > getFood && woodIngame > getWood && goldIngame > getGold) {
+    if(getToggle == "on" && foodIngame > getFood && woodIngame > getWood && goldIngame > getGold) {
+    let resultWood = woodIngame + ".0000 WOOD";
+    let resultGold = (goldIngame - 1000) + ".0000 GOLD";
+    let resultFood = (foodIngame - 1000) + ".0000 FOOD";
+
     try {
       let result = await wax.api.transact({ 
         actions: [{
