@@ -1521,6 +1521,7 @@ async function stuckMember() {
 //////////////////////////////////////stuck member////////////////////////////////////////
 ////////////////////////////////////atomic inventory//////////////////////////////////////
 async function atomicInven() {
+  document.getElementById("atomic").innerHTML = "";
   let getInven = await fetch("https://wax.api.atomicassets.io/atomicassets/v1/assets?collection_name=farmersworld&limit=80&owner="+wax.userAccount);
   let inven = await getInven.json();
   inven.data.forEach((elem, i) => {
