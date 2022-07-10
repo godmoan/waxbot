@@ -235,7 +235,7 @@ async function fetchCoin(coin) {
       },
       body: JSON.stringify({
         "code": "farmerstoken",
-        "account": "21dre.wam",
+        "account": wax.userAccount,
         "symbol": coin
       }),
       redirect: 'follow'
