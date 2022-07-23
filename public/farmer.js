@@ -318,13 +318,20 @@ async function showSetup() {
       `</div><br>`;
 
       document.getElementById('withdrawn').innerHTML += `<div>Withdrawn (ถอน Auto เมื่อ fee5%)</div><br>` +
-      `<p>เนื้อและทอง จะไม่ถูกถอนจนหมด จะเหลือติดไว้อย่างละ 1000</p>` +
       `<p>ทรัพยากรจะถูกถอน เมื่อทรัพยากรทั้ง 3 ตรงเงื่อนไข</p>` +
       `<p style="color: red;">* ต้องไม่ติดล็อค 2fa withdrawn *</p>` +
       `<div style="display: flex;">` +
       `<div class="toggle-switch toggle-switch--green"><input type="checkbox" value="off" class="toggle-switch__checkbox" id="onToggle-withdrawn" onclick="onoffWithdrawn()"><i class="toggle-switch__helper"></i></div>&emsp;&emsp;` +
       `<div id="onoff-withdrawn"><label class="btn btn-dark" style="width: 50px; color: red;">OFF</label></div>` +
-      `</div><br>`;
+      `</div><br>`+
+      `<p>เหลือเนื้อและทองไว้เท่าไหร่หลังถอน</p>` +
+      `<label class="btn btn-dark" style="width: 150px; color: #FF1493;">Store</label>&emsp;`+
+      `<select class="btn btn-dark dropdown-toggle" id="store">` +
+      `<option style="background: black; text-align: left;" value="1000">Store 1k</option>` +
+      `<option style="background: black; text-align: left;" value="2000">Store 2k</option>` +
+      `<option style="background: black; text-align: left;" value="5000">Store 5k</option></select>` +
+      `<hr>`;
+
 
       memType.forEach((obj) => {
         document.getElementById('withdrawn').innerHTML += `<div style="display: flex;">` +
@@ -413,6 +420,9 @@ async function onoffToggle(typ) {
       let withdrawn = await document.getElementById("onToggle-withdrawn").value;
       localStorage.setItem("withdrawn", withdrawn);
 
+      let store = await document.getElementById("store").value;
+      localStorage.setItem("store", store);
+
       let atomic = await document.getElementById("onToggle-atomic").value;
       localStorage.setItem("atomic", atomic);
 
@@ -450,6 +460,12 @@ async function onoffToggle(typ) {
       document.getElementById("credit").checked = false;
       break;
     }
+
+    let loadStore = localStorage.getItem("store");
+    if(loadStore == undefined ) {
+      document.getElementById("store").value = 1000;
+    }
+    document.getElementById("store").value = loadStore;
 
     let loadWithdrawn = localStorage.getItem("withdrawn");
     if(loadWithdrawn == undefined) {
@@ -1539,7 +1555,7 @@ async function withdrawnResource() {
   await getTable("config", 1, "").then((res) => {
     fee = res.rows[0].fee;
   })
-
+  let getStore = localStorage.getItem("store");
   let getToggle = localStorage.getItem("withdrawn");
   let getFood = localStorage.getItem("withdrawnFood");
   let getWood = localStorage.getItem("withdrawnWood");
@@ -1548,8 +1564,8 @@ async function withdrawnResource() {
 
   if(fee == 5 && getToggle == "on" && foodIngame > getFood && woodIngame > getWood && goldIngame > getGold) {
     let resultWood = woodIngame + ".0000 WOOD";
-    let resultGold = (goldIngame - 1000) + ".0000 GOLD";
-    let resultFood = (foodIngame - 1000) + ".0000 FOOD";
+    let resultGold = (goldIngame - getStore) + ".0000 GOLD";
+    let resultFood = (foodIngame - getStore) + ".0000 FOOD";
 
     try {
       let result = await wax.api.transact({ 
