@@ -1,0 +1,250 @@
+@font-face {
+    font-family: kanit;
+    src: url("Kanit-ExtraLight.ttf");
+  }
+
+body {
+    font-family: kanit;
+}
+
+/* ********************* sidebar******************** */
+/* ********************* sidebar******************** */
+a:link { text-decoration: none; color:white; }
+a:visited { text-decoration: none; color:white;  }
+a:hover { text-decoration: none; color:white;  }
+a:active { text-decoration: none; color:white;  }
+
+hr {
+    border-top: 1px solid #999999;
+  }
+
+.sidebar {
+    background-color: #0C2D81;
+    overflow:auto;
+}
+.list-group-item {
+    background-color: #0C2D81;
+    color: white;
+    border: 0px;
+}
+.sidebar-menu {
+    font-size: 14px;
+    text-align: center;
+    animation: sidebar-neon 1s ease-in-out infinite alternate;
+}
+@keyframes sidebar-neon {
+    from {
+      text-shadow: 0 0 2px #fff, 0 0 10px #fff, 0 0 10px red;
+    }
+    to {
+      text-shadow: 0 0 5px #fff, 0 0 20px #fff, 0 0 20px #FF5D00;
+    }
+}
+/* ********************* sidebar******************** */
+/* ********************* sidebar******************** */
+
+/* ********************* content ******************** */
+/* ********************* content ******************** */
+.content {
+    color: white;
+    background-color: black;
+    overflow:auto;
+}
+.card {
+    background-color: black;
+}
+/* ********************* content ******************** */
+/* ********************* content ******************** */
+
+/* ********************* footer ******************** */
+/* ********************* footer ******************** */
+
+.footer {
+    color: white;
+    background-color: black;
+    height: 40px;
+}
+
+/* ********************* footer ******************** */
+/* ********************* footer ******************** */
+
+/* ********************* resource ******************** */
+/* ********************* resource ******************** */
+
+.resource {
+    height: 50px;
+    padding-top: 10px;
+ 
+    box-shadow:
+    0 0 0.1vw  0.4vw #FFFFFF,   
+    0 0 0.4vw  0.6vw #0082FD, 
+    0 0   4vw  0.4vw #002EFF,
+    inset 0 0 1.5vw  0.4vw #002EFF,
+    inset 0 0 0.4vw  0.2vw #0082FD,
+    inset 0 0 0.5vw  0.2vw #FFFFFF;
+  }
+
+.resource-text {
+    font-size: 14px;
+    color: white;
+
+  }
+/* ********************* resource ******************** */
+/* ********************* resource ******************** */
+.price-wrapper {
+    height: 70px;
+    box-shadow:
+    0 0 0.1vw  0.4vw #FFFFFF,   
+    0 0 0.4vw  0.6vw #23F205, 
+    0 0   4vw  0.4vw #218813,
+    inset 0 0 1.5vw  0.4vw #218813,
+    inset 0 0 0.4vw  0.2vw #23F205,
+    inset 0 0 0.5vw  0.2vw #FFFFFF;
+
+  }
+.price-text {
+    font-size: 14px;
+    color: white;
+    padding: 0 0 0 1.5rem;
+    padding-top:25px; 
+  }
+/* ********************* price ******************** */
+/* ********************* price ******************** */
+
+/* ********************* setup ******************** */
+/* ********************* setup ******************** */
+
+.setup {
+    height: 320px;
+    padding-top: 10px;
+ 
+    box-shadow:
+    0 0 0.1vw  0.4vw #FFFFFF,   
+    0 0 0.4vw  0.6vw #0082FD, 
+    0 0   4vw  0.4vw #002EFF,
+    inset 0 0 1.5vw  0.4vw #002EFF,
+    inset 0 0 0.4vw  0.2vw #0082FD,
+    inset 0 0 0.5vw  0.2vw #FFFFFF;
+   
+  }
+
+input[type=text]:focus {
+  background-color: lightblue;
+}
+
+/* ********************* setup ******************** */
+/* ********************* setup ******************** */
+
+/* ********************* item ******************** */
+/* ********************* item ******************** */
+
+.item {
+    padding-top: 10px;
+    /*height: 1000px;*/
+    box-shadow:
+    0 0 0.1vw  0.4vw #FFFFFF,   
+    0 0 0.4vw  0.6vw #A01D2F, 
+    0 0   4vw  0.4vw #FF0023,
+    inset 0 0 1.5vw  0.4vw #FF0023,
+    inset 0 0 0.4vw  0.2vw #A01D2F,
+    inset 0 0 0.5vw  0.2vw #FFFFFF;
+   
+  }
+
+  .mem {
+    padding-top: 10px;
+    /*height: 600px;*/
+    box-shadow:
+    0 0 0.1vw  0.4vw #FFFFFF,   
+    0 0 0.4vw  0.6vw #566573, 
+    0 0   4vw  0.4vw #212F3D ,
+    inset 0 0 1.5vw  0.4vw #212F3D ,
+    inset 0 0 0.4vw  0.2vw #566573,
+    inset 0 0 0.5vw  0.2vw #FFFFFF;
+  }
+
+/* ********************* item ******************** */
+/* ********************* item ******************** */
+
+/* ********************* farm ******************** */
+/* ********************* farm ******************** */
+.farm {
+    padding-top: 10px;
+    /*height: 600px;*/
+    box-shadow:
+    0 0 0.1vw  0.4vw #FFFFFF,   
+    0 0 0.4vw  0.6vw #0082FD, 
+    0 0   4vw  0.4vw #002EFF,
+    inset 0 0 1.5vw  0.4vw #002EFF,
+    inset 0 0 0.4vw  0.2vw #0082FD,
+    inset 0 0 0.5vw  0.2vw #FFFFFF;
+  }
+
+  .log {
+    padding-top: 10px;
+    /*height: 1000px;*/
+    box-shadow:
+    0 0 0.1vw  0.4vw #FFFFFF,   
+    0 0 0.4vw  0.6vw #9B00FF, 
+    0 0   4vw  0.4vw #5F0698,
+    inset 0 0 1.5vw  0.4vw #5F0698,
+    inset 0 0 0.4vw  0.2vw #9B00FF,
+    inset 0 0 0.5vw  0.2vw #FFFFFF;
+  }
+  textarea {
+    background-color: transparent;
+    color: white;
+    border: none;
+    overflow: auto;
+    line-height: 3.5;
+    font-size: 14px;
+    /*
+    outline: none;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+*/
+  }
+
+/* ********************* farm ******************** */
+/* ********************* farm ******************** */
+
+/* ********************* endpoint ******************** */
+/* ********************* endpoint******************** */
+
+.modal-content {
+    background-color: black;
+    padding: 50px;
+    box-shadow:
+    0 0 0.1vw  0.4vw #FFFFFF,   
+    0 0 0.4vw  0.6vw #A01D2F, 
+    0 0   4vw  0.4vw #FF0023,
+    inset 0 0 1.5vw  0.4vw #FF0023,
+    inset 0 0 0.4vw  0.2vw #A01D2F,
+    inset 0 0 0.5vw  0.2vw #FFFFFF;
+}
+
+#modal-endpoint {
+    top: 20%;
+}
+
+/* ********************* endpoint ******************** */
+/* ********************* endpoint******************** */
+
+.tagtool {
+    font-size: 13px;
+    color: white;
+    margin-left: 20px;
+    box-shadow:
+    0 0 0.1vw  0.1vw #FFFFFF,   
+    0 0 0.1vw  0.1vw #0082FD, 
+    0 0   1vw  0.1vw #0082FD, 
+    inset 0 0 0.1vw  0.1vw #0082FD, 
+    inset 0 0 0.1vw  0.1vw #0082FD,
+    inset 0 0 0.1vw  0.1vw #FFFFFF;
+}
+
+.btn-save {
+  background-color: #25BD00;
+  color: white;
+}

@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>              
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title></title>
+
+        <!-- Vendor styles -->
+        <link rel="stylesheet" href="vendors/bower_components/material-design-iconic-font/dist/css/material-design-iconic-font.min.css">
+        <link rel="stylesheet" href="vendors/bower_components/animate.css/animate.min.css">
+        <link rel="stylesheet" href="vendors/bower_components/jquery.scrollbar/jquery.scrollbar.css">
+        <link rel="stylesheet" href="vendors/bower_components/fullcalendar/dist/fullcalendar.min.css">
+        <link rel="stylesheet" href="vendors/bower_components/select2/dist/css/select2.min.css">
+        <link rel="stylesheet" href="vendors/bower_components/dropzone/dist/dropzone.css">
+        <link rel="stylesheet" href="vendors/bower_components/flatpickr/dist/flatpickr.min.css" />
+        <link rel="stylesheet" href="vendors/bower_components/nouislider/distribute/nouislider.min.css">
+        <link rel="stylesheet" href="vendors/bower_components/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.css">
+        <link rel="stylesheet" href="vendors/bower_components/trumbowyg/dist/ui/trumbowyg.min.css">
+
+        <script src='waxjs.js'></script>
+        <!-- App styles -->
+        <link rel="stylesheet" href="css/app.min.css">
+        <link rel="stylesheet" href="css/slider.css">
+        <link rel="stylesheet" href="css/loading.css">
+    </head>
+
+    <body data-sa-theme="2">
+        <main class="main">
+            <div class="page-loader">
+                <div class="page-loader__spinner">
+                    <svg viewBox="25 25 50 50">
+                        <circle cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10" />
+                    </svg>
+                </div>
+            </div>
+
+            <header class="header">
+                <div class="navigation-trigger hidden-xl-up" data-sa-action="aside-open" data-sa-target=".sidebar">
+                    <i class="zmdi zmdi-menu"></i>
+                </div>
+
+                <div class="logo hidden-sm-down">
+                    <h1 id="version"><a href="#"></a></h1>
+                </div>
+
+                <ul class="top-nav">
+                </ul>  
+                <div id="fee"><div class="loading" data-text="loading…">loading…</div></div>              
+            </header>
+
+            <aside class="sidebar">
+                <div class="scrollbar-inner">
+
+                    <div class="user">
+                        <div class="user__info">
+                            <img class="user__img" src="demo/img/profile-pics/logo.png" alt="">
+                            <div>
+                                <div class="user__name" id="waxId"></div>
+                                <div>Wax Wallet</div>
+                            </div>
+                        </div>  
+                    </div>
+
+                    <ul class="navigation">
+                        <li class="navigation__active"><a href="#"><i class="zmdi zmdi-card-giftcard zmdi-hc-fw"></i>Donate : 21dre.wam</a></li>  
+                        <li class="navigation__active"><a href="index.html"><i class="zmdi zmdi-home"></i> Home</a></li>   
+                        <li class="navigation__active"><a href="https://wallet.wax.io/dashboard" target="_blank"><i class="zmdi zmdi-balance-wallet zmdi-hc-fw"></i> Wax Wallet</a></li>  
+                        <li class="navigation__active"><a href="https://sailorsworld.io/play" target="_blank"><i class="zmdi zmdi-boat zmdi-hc-fw"></i> SailorWorld Site</a></li>   
+                        <li class="navigation__active"><a href="https://wax.alcor.exchange/swap?output=WAX-eosio.token&input=DUB-sailorstoken" target="_blank"><i class="zmdi zmdi-menu zmdi-hc-fw"></i> Alcor Exchange</a></li>    
+                        <li class="navigation__active"><a href="https://wax.bloks.io/" target="_blank"><i class="zmdi zmdi-code zmdi-hc-fw"></i> Wax Block</a></li>              
+                    </ul>
+                </div>
+            </aside>
+
+            <section class="content">
+                <div class="row quick-stats">
+
+                    <div class="col-sm-6 col-md-3">
+                        <div class="quick-stats__item">
+                            <div class="quick-stats__info">
+                                <h2 id="waxprice">
+                                    <div class="loading" data-text="loading…">loading…</div>
+                                </h2>
+                            </div>
+
+                           
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-md-3">
+                        <div class="quick-stats__item">
+                            <div class="quick-stats__info">
+                                <h2 id="dubprice">
+                                    <div class="loading" data-text="loading…">loading…</div>
+                                </h2>
+                            </div>
+
+                            
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-md-3">
+                        <div class="quick-stats__item">
+                            <div class="quick-stats__info">
+                                <h2 id="wreckprice">
+                                    <div class="loading" data-text="loading…">loading…</div>
+                                </h2>
+                            </div>
+
+                           
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-md-3">
+                        <div class="quick-stats__item">
+                            <div class="quick-stats__info">
+                                <h2 id="fuelprice">
+                                    <div class="loading" data-text="loading…">loading…</div>
+                                </h2>
+                            </div>
+
+                            
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">Bot</h4><hr>
+                                    <div id="inventory">
+                                        <div class="loading" data-text="Waiting start…">Waiting start…</div>
+                                    </div>                                                          
+                            </div>
+                        </div>
+                    </div>                  
+                </div>
+
+
+                <div class="row">
+                    <div class="col-lg-5">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">Setup</h4>                                                          
+                                    <hr><br>
+                                    <div id="listSetup"></div>
+                                    <br>  
+                                    <h6>Repair & Refill (ตั้งไว้ ต่ำกว่ากี่ % ให้ทำงาน)</h6><br>
+                                    <div>  
+                                        <div class="slider" style="display: flex;">
+                                            <label class="btn btn-dark" style="width: 120px;">Repair</label>&emsp;<br><br>
+                                            <div class="range-wrap">
+                                                <div class="range-value" id="repairValue"></div>
+                                                <input id="repairRange" type="range" min="5" max="100" value="20" step="1">
+                                              </div>
+                                        </div>
+                                        <br><br>
+                                        <div class="slider" style="display: flex;">
+                                            <label class="btn btn-dark" style="width: 120px;">Refill</label>&emsp;<br><br>
+                                            <div class="range-wrap">
+                                                <div class="range-value" id="refillValue"></div>
+                                                <input id="refillRange" type="range" min="5" max="100" value="30" step="1">
+                                              </div>
+                                        </div> 
+                                        <br>
+                                       
+                                        <div id="theme" class="tabcontent">                             
+                                            <a href="#" data-toggle="dropdown"><button class="btn btn-dark" style="color: #B231B6;"><i class="zmdi zmdi-refresh"></i>&emsp;เปลี่ยน Theme</button></a>                                       
+                                            <div class="dropdown-menu dropdown-menu-right">
+                                                <div class="dropdown-item theme-switch">
+                                                    Theme Switch                                  
+                                                    <div class="btn-group btn-group--colors mt-2 d-block" id="themeRadio" data-toggle="buttons">                                                        
+                                                        <label class="btn border-0" style="background-color: #7b3d54"><input name="theme" type="radio" value="1" autocomplete="off"></label>
+                                                        <label class="btn border-0" style="background-color: #273C5B"><input name="theme" type="radio" value="2" autocomplete="off"></label>
+                                                        <label class="btn border-0" style="background-color: #174042"><input name="theme" type="radio" value="3" autocomplete="off"></label>
+                                                        <label class="btn border-0" style="background-color: #383844"><input name="theme" type="radio" value="4" autocomplete="off"></label>
+                                                        <label class="btn border-0" style="background-color: #49423F"><input name="theme" type="radio" value="5" autocomplete="off"></label>             
+                                                        <br>       
+                                                        <label class="btn border-0" style="background-color: #5e3d22"><input name="theme" type="radio" value="6" autocomplete="off"></label>
+                                                        <label class="btn border-0" style="background-color: #234d6d"><input name="theme" type="radio" value="7" autocomplete="off"></label>
+                                                        <label class="btn border-0" style="background-color: #3b5e5e"><input name="theme" type="radio" value="8" autocomplete="off"></label>
+                                                        <label class="btn border-0" style="background-color: #0a4c3e"><input name="theme" type="radio" value="9" autocomplete="off"></label>
+                                                        <label class="btn border-0" style="background-color: #772036"><input name="theme" type="radio" value="10" autocomplete="off"></label>
+                                                    </div>
+                                                </div>
+                                                <a href="#" class="dropdown-item" data-sa-action="fullscreen">Fullscreen</a>
+                                            </div>                            
+                                        </div>
+                                        <br><br><br>
+                                        <button id="btnSave" class="btn btn-success btn--icon-text" onclick="saveSetup()" style="display: block;"><i class="zmdi zmdi-file-text zmdi-hc-fw"></i> Save</button>
+                                        
+                                    </div>                            
+                            </div>
+                        </div>
+                    </div> 
+                    
+                    <div class="col-lg-3">           
+
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">Wallet</h4> 
+                                <hr><br>
+                                <div style="display: flex;">
+                                    <button class="btn btn-dark" style="width: 150px;">Wallet</button>&emsp;&emsp;<div id="acc"><div class="loading" data-text="loading…">loading…</div></div>
+                                </div>   
+                                <hr><br>  
+                                <div style="display: flex;">
+                                    <button class="btn btn-dark" style="width: 150px;">CPU</button>&emsp;&emsp;<div id="cpuShow"><div class="loading" data-text="loading…">loading…</div></div>
+                                </div>   
+                                <hr><br>       
+                                <div style="display: flex;">
+                                    <button class="btn btn-dark" style="width: 150px;">WAX Coins</button>&emsp;&emsp;<div id="waxcoinShow"><div class="loading" data-text="loading…">loading…</div></div>
+                                </div>   
+                                <hr><br>                    
+                            </div>
+                        </div>  
+
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">Resource</h4> 
+                                <hr><br>
+                                <div style="display: flex;">
+                                    <button class="btn btn-dark" style="width: 150px;">Tank</button>&emsp;&emsp;<div id="tank"><div class="loading" data-text="loading…">loading…</div></div>
+                                </div>   
+                                <hr><br>  
+                                <div style="display: flex;">
+                                    <button class="btn btn-dark" style="width: 150px;">Dub</button>&emsp;&emsp;<div id="dub"><div class="loading" data-text="loading…">loading…</div></div>
+                                </div>   
+                                <hr><br>      
+                                <div style="display: flex;">
+                                    <button class="btn btn-dark" style="width: 150px;">Wreck</button>&emsp;&emsp;<div id="wreck"><div class="loading" data-text="loading…">loading…</div></div>
+                                </div>   
+                                <hr><br>  
+                                <div style="display: flex;">
+                                    <button class="btn btn-dark" style="width: 150px;">Fuel</button>&emsp;&emsp;<div id="fuel"><div class="loading" data-text="loading…">loading…</div></div>
+                                </div>   
+                                <hr><br>               
+                                <div id="startBtn">
+                                    <button class="btn btn-success btn--icon-text" style="width: 100%;" onclick="startBtn()">Start Bot</button><br>                             
+                                </div>
+                                <br>
+                            </div>
+                        </div>  
+
+                    </div>   
+                    
+                    <div class="col-lg-4">
+
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">Endpoint</h4> 
+                                <hr><br> 
+                                <div style="display: flex; justify-content: center; align-items: center;">
+                                    <div id="endpoint"><div class="loading" data-text="loading…">loading…</div></div>                                    
+                                </div>                                         
+
+                            </div>
+                        </div>  
+
+
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">Log</h4><hr>
+                                    <textarea id="log" class="form-control" rows="30" cols="200" readonly style="line-height: 35px; opacity: 1;"></textarea>
+                            </div>
+                        </div>  
+                    </div>  
+
+                    
+                <div class="modal fade" id="modal-no-backdrop" data-backdrop="false" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title pull-left">กรุณาเลือก Endpoint</h5>
+                            </div>
+                            <div class="modal-body">
+                              <div class="card">
+                                <select class="btn btn-light dropdown-toggle" id="url">
+                              </select>
+                              </div>                          
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-link" data-dismiss="modal" id="saveModal">Goto Setup</button>
+                                <button type="button" class="btn btn-link" data-dismiss="modal" id="skipSetup">Start Bot</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                </div>
+
+                 
+                </div>
+
+                <footer class="footer hidden-xs-down">
+                    <p>Bot แจกฟรี ไม่อณุญาติให้นำไปขาย หรือใช้ในเชิงพาณิชย์ Donate : 21dre.wam</p>
+                </footer>
+            </section>
+        </main>
+
+        <!-- Javascript -->
+        <!-- Vendors -->
+        <script src="vendors/bower_components/jquery/dist/jquery.min.js"></script>
+        <script src="vendors/bower_components/popper.js/dist/umd/popper.min.js"></script>
+        <script src="vendors/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+        <script src="vendors/bower_components/jquery.scrollbar/jquery.scrollbar.min.js"></script>
+        <script src="vendors/bower_components/jquery-scrollLock/jquery-scrollLock.min.js"></script>
+
+        <script src="vendors/bower_components/salvattore/dist/salvattore.min.js"></script>
+        <script src="vendors/bower_components/flot/jquery.flot.js"></script>
+        <script src="vendors/bower_components/flot/jquery.flot.resize.js"></script>
+        <script src="vendors/bower_components/flot.curvedlines/curvedLines.js"></script>
+        <script src="vendors/bower_components/jqvmap/dist/jquery.vmap.min.js"></script>
+        <script src="vendors/bower_components/jqvmap/dist/maps/jquery.vmap.world.js"></script>
+        <script src="vendors/bower_components/jquery.easy-pie-chart/dist/jquery.easypiechart.min.js"></script>
+        <script src="vendors/bower_components/peity/jquery.peity.min.js"></script>
+        <script src="vendors/bower_components/moment/min/moment.min.js"></script>
+        <script src="vendors/bower_components/fullcalendar/dist/fullcalendar.min.js"></script>
+
+
+        <script src="vendors/bower_components/jquery-mask-plugin/dist/jquery.mask.min.js"></script>
+        <script src="vendors/bower_components/select2/dist/js/select2.full.min.js"></script>
+        <script src="vendors/bower_components/dropzone/dist/min/dropzone.min.js"></script>      
+        <script src="vendors/bower_components/flatpickr/dist/flatpickr.min.js"></script>
+        <script src="vendors/bower_components/nouislider/distribute/nouislider.min.js"></script>
+        <script src="vendors/bower_components/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js"></script>
+        <script src="vendors/bower_components/trumbowyg/dist/trumbowyg.min.js"></script>
+        
+        <!-- Charts and maps-->
+        <script src="demo/js/flot-charts/curved-line.js"></script>
+        <script src="demo/js/flot-charts/line.js"></script>
+        <script src="demo/js/flot-charts/dynamic.js"></script>
+        <script src="demo/js/flot-charts/chart-tooltips.js"></script>
+        <script src="demo/js/other-charts.js"></script>
+        <script src="demo/js/jqvmap.js"></script>
+        <script src="js/slider.js"></script>
+
+        <!-- App functions and actions -->
+        <script src="js/app.min.js"></script>
+        <script src="sailor.js"></script>     
+    </body>
+</html>

@@ -1,0 +1,19 @@
+.loading {
+    position: relative;
+    color: rgba(0, 0, 0, .3);
+}
+.loading:before {
+    content: attr(data-text);
+    position: absolute;
+    overflow: hidden;
+    max-width: 7em;
+    white-space: nowrap;
+    color: #fff;
+    animation: loading 5s linear;
+    animation-iteration-count: infinite;
+}
+@keyframes loading {
+    0% {
+        max-width: 0;
+    }
+}

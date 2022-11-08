@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Waiting Start</title>
+    <link href="bootstrap/bootstrap.css" rel="stylesheet">
+    <link href="css/main.css" rel="stylesheet">
+    <script src="js/jquery.js"></script>
+    <script src="bootstrap/bootstrap.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src='waxjs.js'></script>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- side bar-->
+            <div class="col-md-12 col-xl-2 sidebar">
+                <div class="row mt-4">
+                    <div class="col-12 text-center">
+                        <img src="img/mairom.jpg" class="rounded-circle" width="70" height="70"> 
+                        <h6 class="text-white mt-4" id="waxId">Wax Wallet</h6>
+                    </div>
+                </div>            
+                <div class="list-group mt-3">
+                    <hr>
+                    <li class="list-group-item"><a href="https://play.farmersworld.io/" target="_blank"><div class="sidebar-menu m-l5">Farmers World Site</div></a></li><hr>
+                    <li class="list-group-item"><a href="https://wallet.wax.io/" target="_blank"><div class="sidebar-menu m-l5">Wax Wallet</a></li><hr>
+                    <li class="list-group-item"><a href="https://wax.alcor.exchange/swap" target="_blank"><div class="sidebar-menu m-l5">Alcor</div></a></li><hr>
+                    <li class="list-group-item"><a href="https://wax.bloks.io/" target="_blank"><div class="sidebar-menu m-l5">Wax Block</div></a></li><hr>
+                    <li class="list-group-item"><a href="https://github.com/godmoan/waxbot" target="_blank"><div class="sidebar-menu m-l5">Download Bot</div></a></li><hr>
+                </div>
+                <div class="list-group text-center mt-3">
+                    <li class="list-group-item" id="cpuShow">CPU: </li>
+                    <li class="list-group-item" id="waxcoinShow">Wax Coins: </li>
+                    <li class="list-group-item" id="fwwcoin">FWW Coins: </li>
+                    <li class="list-group-item" id="fwfcoin">FWF Coins: </li>
+                    <li class="list-group-item" id="fwgcoin">FWG Coins: </li>
+                    <li class="list-group-item" id="invenMilk">Milk: </li>
+                    <li class="list-group-item" id="invenEgg">Egg: </li>
+                    <li class="list-group-item" id="invenBarley">Barley: </li>
+                </div>
+                 
+            </div>
+             <!-- side bar-->
+
+             <!-- content -->
+            <div class="col-md-12 col-xl-10 content">
+                <!-- Resource -->
+                <div class="row justify-content-center mt-4">                  
+                    <div class="col-md-12 col-xl-11 text-center resource">
+                        <label class="resource-text mx-2" id="version">Romsai Bot</label>
+                        <label class="resource-text mx-2">Resource</label>
+                        <label class="resource-text mx-2">|<label/;>
+                        <label class="resource-text mx-2" id="energy">Energy:</label>
+                        <label class="resource-text mx-2" id="fww">Wood Token:</label>
+                        <label class="resource-text mx-2" id="fwf">Food Token:</label>
+                        <label class="resource-text mx-2" id="fwg">Gold Token:</label>
+                        <label class="resource-text mx-2" id="coinstake">Farmer Coin:</label>
+                        <label class="resource-text mx-2" id="fee">Fee:</label>
+                        <input class="form-check-input" type="checkbox" value="" id="chkplay">
+                    </div>                        
+                </div>
+                <!-- Resource -->
+
+                <!-- price -->
+                <div class="row justify-content-center">
+                    <div class="col-md-12 col-xl-11">
+                        <div class="row justify-content-center">
+                            <div class="col-col-md-12 col-xl-2 mx-2 mt-5">
+                                <div class="price-wrapper">
+                                    <div class="price-text" id="waxprice">Wax/THB</div>
+                                </div>
+                            </div>
+                            <div class="col-md-12 col-xl-2 mt-5">
+                                <div class="price-wrapper">
+                                    <div class="price-text" id="fwwprice">FWW/Wax</div>
+                                </div>
+                            </div>
+                            <div class="col-md-12 col-xl-2 mt-5">
+                                <div class="price-wrapper">
+                                    <div class="price-text" id="fwfprice">FWF/Wax</div>
+                                </div>
+                            </div>
+                            <div class="col-md-12 col-xl-2 mt-5">
+                                <div class="price-wrapper">
+                                    <div class="price-text" id="fwgprice">FWG/Wax</div>
+                                </div>
+                            </div>             
+                            <div class="col-md-12 col-xl-3 mt-5">
+                                <div class="price-wrapper">
+                                    <div class="price-text" id="showEndpoint">Endpoint</div>
+                                </div>
+                            </div>   
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <!-- price -->
+
+                <!-- setup -->
+
+                                <!--member-->
+                <div class="row justify-content-center mt-5">
+                    <div class="col-md-12 col-xl-3">
+                        <div class="setup">
+                            <div class="text-center mx-3">Member</div>
+
+                                <div class="row mt-4"> 
+                                    <div class="col-4">
+                                        <div class="mx-3">Wood</div>
+                                    </div>                                  
+                                    <div class="col-4">
+                                        <select id="select-Wood" style="width: 80px;">
+                                            <option value="0" selected>-</option>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-4 form-check form-switch">
+                                        <input class="form-check-input" value="off"  type="checkbox" id="onToggle-Wood" onclick="onoffToggle('Wood')">
+                                    </div>
+                                </div>
+
+                                <div class="row mt-2"> 
+                                    <div class="col-4">
+                                        <div class="mx-3">Food</div>
+                                    </div>                                  
+                                    <div class="col-4">
+                                        <select id="select-Food" style="width: 80px;">
+                                            <option value="0" selected>-</option>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-4 form-check form-switch">
+                                        <input class="form-check-input" value="off"  type="checkbox" id="onToggle-Food" onclick="onoffToggle('Food')">
+                                    </div>
+                                </div>
+
+
+                                <div class="row mt-2"> 
+                                    <div class="col-4">
+                                        <div class="mx-3">Gold</div>
+                                    </div>                                  
+                                    <div class="col-4">
+                                        <select id="select-Gold" style="width: 80px;">
+                                            <option value="0" selected>-</option>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-4 form-check form-switch">
+                                        
+                                        <input class="form-check-input" value="off"  type="checkbox" id="onToggle-Gold" onclick="onoffToggle('Gold')">
+                                    </div>
+                                </div>
+
+                                <hr>
+                                <div class="row justify-content-center mt-5"> 
+                                    <div class="col-5 d-grid gap-2">
+                                        <button class="btn btn-save" type="submit" onclick="saveSetup()">Save</button>
+                                    </div>
+                                    <div class="col-5 d-grid gap-2">
+                                        <button class="btn btn-primary" type="submit" data-bs-toggle="modal" data-bs-target="#modal-endpoint">Start Bot</button>
+                                    </div>
+                                    
+                                    
+                                </div>
+
+                        </div>
+                    </div>
+                                    <!--member-->
+
+
+                                    <!--withdraw-->
+
+                    <div class="col-md-12 col-xl-2">
+                        <div class="setup">
+                            <div class="text-center mx-3">Withdraw</div>
+             
+                            <div class="row mt-2"> 
+                                <div class="col-6">
+                                    <div class="mx-3">Withdraw</div>
+                                </div>                                  
+            
+                                <div class="col-6 form-check form-switch">
+                                    <input class="form-check-input" value="off"id="onToggle-withdrawn" onclick="onoffWithdrawn()" type="checkbox">
+                                </div>
+                            </div>  
+                            
+                                    
+                            <div class="row mt-2"> 
+                                <div class="col-6">
+                                    <div class="mx-3">Store</div>
+                                </div>                                  
+            
+                                <div class="col-6">
+                                    <select id="store">
+                                        <option value="1000" selected>1k</option>
+                                        <option value="2000">2k</option>
+                                        <option value="5000">5k</option>
+                                    </select>
+                                </div>       
+                            </div>       
+
+                            <div class="row mt-2"> 
+                                <div class="col-6">
+                                    <div class="mx-3">Wood</div>
+                                </div>                                  
+            
+                                <div class="col-6">
+                                    <select id="withdrawn-Wood">
+                                        <option value="3000" selected>3k</option>
+                                        <option value="5000">5k</option>
+                                    </select>
+                                </div>                     
+                            </div>       
+
+                            <div class="row mt-2"> 
+                                <div class="col-6">
+                                    <div class="mx-3">Food</div>
+                                </div>                                  
+            
+                                <div class="col-6">
+                                    <select id="withdrawn-Food">
+                                        <option value="3000" selected>3k</option>
+                                        <option value="5000">5k</option>
+                                    </select>
+                                </div>                     
+                            </div>  
+                            
+                            <div class="row mt-2"> 
+                                <div class="col-6">
+                                    <div class="mx-3">Gold</div>
+                                </div>                                  
+            
+                                <div class="col-6">
+                                    <select id="withdrawn-Gold">
+                                        <option value="3000" selected>3k</option>
+                                        <option value="5000">5k</option>
+                                    </select>
+                                </div>                     
+                            </div>     
+                            <hr>
+                            <div class="text-center mx-3">Spare Memory</div>   
+                            <div class="row mt-2"> 
+                                <div class="col-6">
+                                    <div class="mx-3">Spare</div>
+                                </div>                                  
+            
+                                <div class="col-6 form-check form-switch">                                 
+                                    <input class="form-check-input" value="off" type="checkbox" id="onToggle-spareram" onclick="onoffToggle('spareram')">                                  
+                                </div>                    
+                            </div>   
+                            
+                        </div>
+                    </div>
+                                <!--withdraw-->
+
+                                <!--repair refil-->
+                    
+                    <div class="col-md-12 col-xl-3">
+                        <div class="setup">
+                            <div class="text-center mx-3">Repair & Refill</div>                 
+                            
+                            <div class="row mt-2"> 
+                                <div class="col-2">
+                                    <div class="mx-2">Repair</div>
+                                </div>                                  
+                                <div class="col-1">
+                                    <button onclick="minusBtn('repair')">-</button>
+                                </div>
+                                <div class="col-5">
+                                    <input type="range" class="form-range" value="50" min="5" max="95" id="repairRange" onchange="repairOnchange(this.value)">
+                                </div>  
+                                <div class="col-1">
+                                    <button onclick="plusBtn('repair')">+</button>
+                                </div> 
+                                
+                                <div class="col-1 mx-2">
+                                    <label class="btn btn-light" id="repair-label" style="height: 32px; font-size: 12px;">50</label>
+                                </div>
+                            </div>     
+                        
+                            <div class="row mt-2"> 
+                                <div class="col-2">
+                                    <div class="mx-2">Refill</div>
+                                </div>  
+                                
+                                <div class="col-1">
+                                    <button onclick="minusBtn('refill')">-</button>
+                                </div>
+            
+                                <div class="col-5">
+                                    <input type="range" class="form-range" value="50" min="5" max="95" id="refillRange" onchange="refillOnchange(this.value)">
+                                </div>   
+
+                                <div class="col-1">
+                                    <button onclick="plusBtn('refill')">+</button>
+                                </div> 
+                                
+                                <div class="col-2 mx-2">
+                                    <label class="btn btn-light" id="refill-label" style="height: 32px; font-size: 12px;">50</label>
+                                </div>
+                            </div> 
+
+                            <hr>
+                            <div class="text-center mx-2">Auto Send Resource</div>
+                            <div class="row mt-2"> 
+                                <div class="col-6">
+                                    <div class="mx-3">Auto Send</div>
+                                </div>                                  
+            
+                                <div class="col-6 form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" value="off" id="onToggle-send" onclick="onoffToggle('send')">
+                                </div>                  
+                            </div>     
+
+                            <div class="row mt-2"> 
+                                <div class="col-5">
+                                    <div class="mx-3">Wallet Id</div>
+                                </div>                                  
+            
+                                <div class="col-6 form-check form-switch">
+                                    <input type="text" size="10" id="autoSend">
+                                </div>                  
+                            </div>     
+                            
+                        </div>
+                    </div>
+                    
+                                <!--repair refil-->
+                
+                    <div class="col-md-12 col-xl-3">
+                        <div class="setup">
+                            <div class="text-center mx-3">Autobuy & Autosell</div>
+
+                            <div class="row mt-2"> 
+                                <div class="col-6">
+                                    <div class="mx-3">Barley(Buy)</div>
+                                </div>                                  
+            
+                                <div class="col-6 form-check form-switch">                                 
+                                    <input class="form-check-input" value="off" type="checkbox" id="onToggle-barley" onclick="onoffToggle('barley')">                                  
+                                </div>                    
+                            </div>     
+
+                            <div class="row mt-2"> 
+                                <div class="col-6">
+                                    <div class="mx-3">Milk(Sell)</div>
+                                </div>                                  
+            
+                                <div class="col-6 form-check form-switch">                                 
+                                    <input class="form-check-input" type="checkbox" value="off" id="onToggle-milk" onclick="onoffToggle('milk')">                                 
+                                </div>                    
+                            </div>     
+
+                            <div class="row mt-2"> 
+                                <div class="col-6">
+                                    <div class="mx-3">Egg(Sell)</div>
+                                </div>                                  
+            
+                                <div class="col-6 form-check form-switch">                                 
+                                    <input class="form-check-input" type="checkbox" value="off" id="onToggle-egg" onclick="onoffToggle('egg')">                               
+                                </div>                    
+                            </div>    
+                            <hr>
+                                <!--auto craft-->
+                            <div class="text-center mx-3">Auto Craft Member</div>  
+                            <div class="row mt-2"> 
+                                <div class="col-6">
+                                    <div class="mx-3">Auto Craft</div>
+                                </div>                                  
+            
+                                <div class="col-6 form-check form-switch">                                 
+                                    <input class="form-check-input" type="checkbox" value="off" id="onToggle-craft" onclick="onoffToggle('craft')">                           
+                                </div>                    
+                            </div>   
+           
+                                 <!--auto craft-->
+
+                        </div>
+                    </div>                        
+                </div>
+                            
+
+                <div class="row justify-content-center mt-5">
+                    <div class="col-md-12 col-xl-11 mem">  
+                        <div class="text-center">Inventory(Silver Member แสดง 10 อันล่าสุด)</div><hr> 
+                        <div class="justify-content-center py-3" id="inventory" style="text-align: center;"></div>  
+                    </div>
+                </div>
+
+                <!-- item -->  
+
+                <div class="row justify-content-center mt-5">
+                    <div class="col-md-12 col-xl-6 farm">
+                        <div class="text-center mt-3">Building(Plot)</div><hr>     
+                            <div id="building"></div>  
+                        <div class="text-center mt-3">Plant(Farm Plot)</div><hr>   
+                            <div id="plant"></div>
+                    </div>
+
+                    <div class="col-md-12 col-xl-5 farm">
+                        <div class="text-center mt-3">Chicken(Coop) & Cow(Cowshed)</div><hr> 
+                        <div id="animals"></div>                            
+                    </div>
+                </div>
+
+                <div class="row justify-content-center mt-5">                          
+                    <div class="col-md-12 col-xl-6 mx-5 item">
+                        <div class="text-center mt-3">Mining Tool</div><hr>
+                        <div id="tool"></div>
+                        <div class="text-center mt-3">Member</div><hr>
+                        <div id="mem"></div>
+                    </div>
+
+                    <div class="col-md-12 col-xl-4 log mx-4">
+                        <div class="text-center mt-3">Log</div><hr>
+                        <textarea class="mx-3" readonly id="log" rows="20" cols="65"></textarea>
+                        <div class="row mt-3 mb-3">
+                            <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+                                <button type="button" class="btn btn-warning" onclick="scrollTextarea()">Scroll to Bottom</button>
+                                <button type="button" class="btn btn-success" onclick="clearText()">Clear Log Text</button>
+                              </div>
+                        </div> 
+                    </div>
+
+                </div>
+
+               
+
+                 <!-- Endpoint modal-->
+             <div class="modal fade modal-lg modal-dialog-centered" id="modal-endpoint" data-bs-backdrop="static">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title text-white" id="staticBackdropLabel">กรุณาเลือก Endpoint</h5>
+                    </div>
+                    <div class="modal-body">
+                        <div class="modal-body">
+                            <div class="card">
+                              <select class="btn btn-black text-white dropdown-toggle" id="url">
+                            </select>
+                        </div> 
+                        <hr class="mt-5">
+                        <div class="text-white text-center mt-5">Status: &emsp;<label id="urlStatus">Waiting Check...</label></div>
+                    </div>
+                    
+                        <div class="mt-5">
+                            <button type="button" class="btn btn-info text-white mx-5" data-bs-dismiss="modal" id="saveModal" onclick="clickSetup()">Goto Setup</button>
+                            <button type="button" class="btn btn-warning mx-5" data-dismiss="modal" onclick="checkEndpoint()">Check Endpoint</button>
+                            <button type="button" class="btn btn-primary mx-5" data-bs-dismiss="modal" id="skipSetup" onclick="clickStart()">Start Bot</button>
+                        </div>
+                        <hr class="mt-5">
+                        <div class="modal-body">
+                            <div class="modal-body">
+                                <div class="card">
+                                    <h5 class="modal-title text-white" id="staticBackdropLabel"><u>What's new 5.0.1</u></h5>
+                                    <hr>
+                                    <p>-เปลี่ยน ui ใหม่</p>
+                                    <p>-เพิ่ม Mode Check Endpoint</p>
+                                    <p>-เพิ่ม Mode ประหยัด ram</p>
+                                    <p>-เพิ่ม Mode ส่ง ไม้ ทอง เนื้อ ไปให้ไอดีที่ตั้งไว้</p>
+                                    <p>-เพิ่ม Mode Craft Silver Member และรับอัตโนมัติ</p>                               
+                            </div> 
+                        </div>
+                  </div>
+                </div>
+              </div>
+            
+              <!-- Endpoint modal-->
+            
+              <!-- item -->
+            </div>
+             <!-- content -->
+        
+
+        </div>
+    </div>
+    <script src="farmer.js"></script>
+</body>
+</html>
