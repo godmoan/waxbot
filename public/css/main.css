@@ -225,7 +225,7 @@ input[type=text]:focus {
 }
 
 #modal-endpoint {
-    top: 20%;
+    /*top: 20%;*/
 }
 
 /* ********************* endpoint ******************** */

@@ -1297,6 +1297,37 @@ async function claimTool(id, toolname, typeClaim) {
     }
 }
 /////////////////////////////////////////claim tool//////////////////////////////////////////
+/////////////////////////////////////////claim farm//////////////////////////////////////////
+async function claimFarm(id, toolname, typeClaim) {
+  try {
+    let result = await wax.api.transact({ 
+      actions: [{
+        account: 'farmersworld',
+          name: typeClaim,
+          authorization: [{
+            actor: wax.userAccount,
+            permission: 'active',
+          }],
+          data: {
+            owner: wax.userAccount,
+            crop_id: id,
+          },
+        }]
+      }, {
+        blocksBehind: 3,
+        expireSeconds: 30
+      });
+      document.getElementById('log').innerHTML += thisTime() + `: Claim (${toolname}) สำเร็จ !!! \n`;
+      scrollTextarea();
+
+    }
+    catch(err) {
+      console.log(err);
+      document.getElementById('log').innerHTML += thisTime() + `: Claim (${toolname}) ไม่สำเร็จ ( ${err.message}) !!! \n`;
+      scrollTextarea();
+    }
+}
+/////////////////////////////////////////claim farm//////////////////////////////////////////
 
 /////////////////////////////////////////countdown///////////////////////////////////////////
 async function countDown() {
