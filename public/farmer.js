@@ -1,5 +1,5 @@
 ///////////////////////////////////////variable///////////////////////////////////////
-let version = "5.0.1";
+let version = "5.0.2";
 const endpointJson = {"u1": "https://chain.wax.io", "u2": "https://wax.eu.eosamsterdam.net", "u3": "https://wax.blokcrafters.io", "u4": "https://api.wax.alohaeos.com", "u5": "https://api.waxsweden.org", "u6": "https://wax.pink.gg", "u7": "https://wax.dapplica.io","u8": "https://wax.eosphere.io", "u9": "https://api.wax.greeneosio.com", "u10": "https://wax.cryptolions.io", "u11": "https://wax.eosusa.news", "u12": "https://api.wax.bountyblok.io", "u13": "https://wax.greymass.com", "u14": "https://wax.eosrio.io", "u15": "https://wax.eosdublin.io"};
 const endpointArr = ["https://chain.wax.io", "https://wax.eu.eosamsterdam.net", "https://wax.blokcrafters.io", "https://api.wax.alohaeos.com", "https://api.waxsweden.org", "https://wax.pink.gg", "https://wax.dapplica.io", "https://wax.eosphere.io", "https://api.wax.greeneosio.com", "https://wax.cryptolions.io", "https://wax.eosusa.news", "https://api.wax.bountyblok.io", "https://wax.greymass.com", "https://wax.eosrio.io", "https://wax.eosdublin.io"];
 let selectEndpoint;
@@ -34,7 +34,7 @@ let text2 = "ละละละละ เละๆๆๆ";
 let text3 = "ลุงเริง บ่นว่าเงี่ยน";
 ////////////////////////////////////////version////////////////////////////////////////
 document.getElementById("version").innerHTML = `Romsai Bot ${version}`;
-function chkVer() {
+async function chkVer() {
   const config = {
     url: "/chkver",
     method: "POST",
@@ -168,14 +168,14 @@ async function clickStart() {
   .then(async() => { await waxStart(); })
   .then(async() => { await waxlogin(); })
   .then(async () => { await loadSave(); })
-  .then(async () => { await chkVer(); await coinmarketcapWax(); await alcorPrice(); })
+  .then(async () => { await chkVer(); coinmarketcapWax(); alcorPrice(); })
   .then(async () => { await toolTable(); await memTable(); await buildingTable(); })
-  .then(async () => { await milkFetch(); await eggFetch(); await barleyFetch(); })
-  .then(async() => { await farmTable(); await animalTable(); await chkRefill(); }) 
+  .then(async () => { await barleyFetch(); })
+  .then(async() => { await buyBarleyMarket(); await farmTable(); animalTable(); await chkRefill(); }) 
   .then(async() => { await withdrawnResource(); await autoCraft(); await stuckMember();  }) 
-  .then(async() => { await atomicInven(); await sendResource(); })
+  .then(async() => { atomicInven(); await sendResource(); })
   .then(async() => { showCooldown(); })
-  .then(async() => { setTimeout(() => { buyBarleyMarket();}, 10000); })
+  .then(async() => { milkFetch(); eggFetch(); autoSell(); })
   .then(() => {
     chkFirstTime = false;
   })
@@ -652,17 +652,17 @@ function rom() {
 ///////////////////////////////////////// rom ////////////////////////////////////////
 //////////////////////////////////////////price///////////////////////////////////////////
  async function coinmarketcapWax() {
-  let setTime = 0;
-  if(chkFirstTime === false) {
-    setTime = ((Math.floor(Math.random() * 10) + 1)*10000) + 240000;
-  }
+  let setTime = 600000;
+  /*if(chkFirstTime === false) {
+    setTime = ((Math.floor(Math.random() * 10) + 1)*10000) + 600000;
+  }*/
   setInterval(async () => {
     let requestOptions = {
       method: 'GET',
       redirect: 'follow'
     };
 
-  await fetch("https://api.coingecko.com/api/v3/simple/price?ids=WAX&vs_currencies=THB", requestOptions)
+  fetch("https://api.coingecko.com/api/v3/simple/price?ids=WAX&vs_currencies=THB", requestOptions)
   .then((response) => {
           return response.json();
       })
@@ -679,10 +679,10 @@ function rom() {
 
  async function alcorPrice() {
   
-  let setTime = 0;
-  if(chkFirstTime === false) {
-    setTime = ((Math.floor(Math.random() * 10) + 1)*10000) + 240000;
-  }
+  let setTime = 600000;
+  /*if(chkFirstTime === false) {
+    setTime = ((Math.floor(Math.random() * 10) + 1)*10000) + 600000;
+  }*/
 
   setInterval(async () => {
     let requestOptions = {
@@ -690,7 +690,7 @@ function rom() {
       redirect: 'follow'
       };
     
-      await fetch("https://wax.alcor.exchange/api/markets/105", requestOptions)
+      fetch("https://wax.alcor.exchange/api/markets/105", requestOptions)
       .then((response) => {
           return response.json();
       })
@@ -701,8 +701,8 @@ function rom() {
       .catch((error) => {
           
       })
-    
-      await fetch("https://wax.alcor.exchange/api/markets/104", requestOptions)
+      await sleep(5000);
+      fetch("https://wax.alcor.exchange/api/markets/104", requestOptions)
       .then((response) => {
           return response.json();
       })
@@ -713,8 +713,8 @@ function rom() {
       .catch((error) => {
           
       })
-    
-      await fetch("https://wax.alcor.exchange/api/markets/106", requestOptions)
+      await sleep(5000);
+      fetch("https://wax.alcor.exchange/api/markets/106", requestOptions)
       .then((response) => {
           return response.json();
       })
@@ -804,12 +804,13 @@ async function barleyFetch() {
 //////////////////////////////////////fetch barley/////////////////////////////////////////
 /////////////////////////////////////////tool table///////////////////////////////////////////
 async function toolTable() {
-  console.clear();
   let setTime = 0;
   if(chkFirstTime === false) {
     setTime = ((Math.floor(Math.random() * 10) + 1)*10000) + 60000;
   }
   setInterval(async() => {
+    console.clear();
+    await chkRefill();  
     const listTool = await getTable("tools", 2, wax.userAccount);
     await Promise.all(listTool.rows.map(async (id) => {
       if(toolArr.includes(id) === false) {
@@ -833,24 +834,16 @@ async function toolTable() {
         let startMonth = new Date((elem.next_availability * multiTime) - onehrs).toLocaleString('en-US', { month: 'numeric' })
         let startTime = new Date((elem.next_availability * multiTime) - onehrs).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
 
-        document.getElementById('tool').innerHTML += `<div class="row"><label class="tagtool" style="width: 150px;">${toolnameObj[elem.asset_id]}</label>` +
+        document.getElementById('tool').innerHTML += `<div class="row container d-flex align-items-center justify-content-center"><label class="tagtool" style="width: 150px;">${toolnameObj[elem.asset_id]}</label>` +
         `<label class="tagtool" style="width: 100px; ">${elem.current_durability}/${elem.durability}</label>` +
         `<label id="startTime-${elem.asset_id}" class="tagtool" style="width: 250px;">Last Claim | Day : ${startDay}/${startMonth} Time: ${startTime} </label>` +
         `<label id="countDown-${elem.asset_id}" class="tagtool" style="width: 100px;"></label>` +
         `</div><br>`; 
       }  
       
-      try {    
-        for (let elem of tools) {
-          await chkRefill();        
+        for (let elem of tools) {          
           let repairSetup = localStorage.getItem("repairFw");
           let repairPercen = (elem.durability * repairSetup) / 100;
-          
-          if(elem.current_durability < repairPercen) {
-            let rand = Math.floor(Math.random() * 5) + 1;
-            await sleep(2000 * rand);
-            await chkRepair(elem.asset_id, toolnameObj[elem.asset_id]);
-          }
 
           let getMem = localStorage.getItem(elem.type);
           let obj = JSON.parse(getMem);
@@ -862,14 +855,18 @@ async function toolTable() {
             await sleep(3000 * rand);   
             await claimTool(elem.asset_id, toolnameObj[elem.asset_id], "claim");
           }
+
+          if(elem.current_durability < repairPercen) {
+            let rand = Math.floor(Math.random() * 5) + 1;
+            await sleep(2000 * rand);
+            await chkRepair(elem.asset_id, toolnameObj[elem.asset_id]);
+          }
+
           if(savemode === 1) {
             document.getElementById("countDown-"+elem.asset_id).innerHTML = "Save Mode"
           }
         }
-      }
-      catch(err) {
-        console.log(err);
-      }
+
       
   }, delayTime + setTime); 
   
@@ -907,7 +904,7 @@ async function memTable() {
             let startTime = new Date((elem.next_availability * multiTime) - oneday).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
             memObj[id] = {"time": timeClaim};
            
-            document.getElementById('mem').innerHTML += `<div class="row"><label class="tagtool" style="width: 150px;">${memnameObj[id]}</label>` +
+            document.getElementById('mem').innerHTML += `<div class="row container d-flex align-items-center justify-content-center"><label class="tagtool" style="width: 150px;">${memnameObj[id]}</label>` +
             `<label class="tagtool" style="width: 100px; ">${elem.type}</label>` +
             `<label id="startTime-${elem.asset_id}" class="tagtool" style="width: 250px;">Last Claim | Day : ${startDay}/${startMonth} Time: ${startTime} </label>` +
             `<label id="countDown-${elem.asset_id}" class="tagtool" style="width: 100px;"></label>` +
@@ -992,7 +989,7 @@ async function farmTable() {
     let startTime = new Date(res.last_claimed * multiTime).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
 
 
-  document.getElementById('plant').innerHTML += `<div class="row"><label class="tagtool" style="width: 150px;">${res.name}</label>` +
+  document.getElementById('plant').innerHTML += `<div class="row container d-flex align-items-center justify-content-center"><label class="tagtool" style="width: 150px;">${res.name}</label>` +
   `<label class="tagtool" style="width: 100px; ">${res.times_claimed} | Claimed </label>` +
   `<label id="startTime-${id}" class="tagtool" style="width: 250px;">Last Claim | วันที่ : ${startDay}/${startMonth} เวลา: ${startTime} </label>` +
   `<label id="countDown-${id}" class="tagtool" style="width: 100px;"></label>` +
@@ -1014,7 +1011,7 @@ async function farmTable() {
 async function animalTable() {
   let setTime = 0;
   if(chkFirstTime === false) {
-    setTime = ((Math.floor(Math.random() * 10) + 1)*10000) + 60000;
+    setTime = ((Math.floor(Math.random() * 10) + 1)*10000) + 80000;
   }
   setInterval(async() => {
   const listAni = await getTable("animals", 2, wax.userAccount);
@@ -1030,7 +1027,7 @@ async function animalTable() {
     let startTime = new Date(res.last_claimed * multiTime).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
 
 
-      document.getElementById('animals').innerHTML += `<div class="row"><label class="tagtool" style="width: 100px;">${res.name}</label>` +
+      document.getElementById('animals').innerHTML += `<div class="row container d-flex align-items-center justify-content-center"><label class="tagtool" style="width: 100px;">${res.name}</label>` +
       `<label class="tagtool" style="width: 100px; ">0 | Claimed </label>` +
       `<label id="startTime-${id}" class="tagtool" style="width: 250px;">Last Claim | วันที่ : ${startDay}/${startMonth} เวลา: ${startTime}</label>` +
       `</div><br>`; 
@@ -1052,7 +1049,7 @@ async function animalTable() {
           if(res.day_claims_at.length < 4) {
             let rand = Math.floor(Math.random() * 5) + 1;
             await sleep(2000 * rand);
-            await barleyFetch();
+            barleyFetch();
             barley = barleyArr[0];
             memo = "feed_animal:"+id;
             await sendToken(res.name, barley, "Feed", memo); 
@@ -1060,7 +1057,7 @@ async function animalTable() {
           else if(res.day_claims_at.length == 4 && res.day_claims_at[0] * multiTime < Date.now() - oneday) {
             let rand = Math.floor(Math.random() * 5) + 1;
             await sleep(2000 * rand);
-            await barleyFetch();
+            barleyFetch();
             barley = barleyArr[0];
             memo = "feed_animal:"+id;
             await sendToken(res.name, barley, "Feed", memo); 
@@ -1070,7 +1067,7 @@ async function animalTable() {
           if(res.day_claims_at.length < 4) {
             let rand = Math.floor(Math.random() * 5) + 1;
             await sleep(2000 * rand);
-            await barleyFetch();
+            barleyFetch();
             barley = barleyArr[0];
             memo = "feed_animal:"+id;
             await sendToken(res.name, barley, "Feed", memo);  
@@ -1078,7 +1075,7 @@ async function animalTable() {
           else if(res.day_claims_at.length == 4 && res.day_claims_at[0] * multiTime < Date.now() - oneday) {
             let rand = Math.floor(Math.random() * 5) + 1;
             await sleep(2000 * rand);
-            await barleyFetch();
+            barleyFetch();
             barley = barleyArr[0];
             memo = "feed_animal:"+id;
             await sendToken(res.name, barley, "Feed", memo);  
@@ -1106,7 +1103,7 @@ async function animalTable() {
           if(res.day_claims_at.length < 4) {
             let rand = Math.floor(Math.random() * 5) + 1;
             await sleep(2000 * rand);
-            await barleyFetch();
+            barleyFetch();
             barley = barleyArr[0];
             memo = "feed_animal:"+id;
             await sendToken(res.name, barley, "Feed", memo);     
@@ -1114,7 +1111,7 @@ async function animalTable() {
           else if(res.day_claims_at.length == 4 && res.day_claims_at[0] * multiTime < Date.now() - oneday) {
             let rand = Math.floor(Math.random() * 5) + 1;
             await sleep(2000 * rand);
-            await barleyFetch();
+            barleyFetch();
             barley = barleyArr[0];
             memo = "feed_animal:"+id;
             await sendToken(res.name, barley, "Feed", memo);     
@@ -1124,7 +1121,7 @@ async function animalTable() {
           if(res.day_claims_at.length < 6) {
             let rand = Math.floor(Math.random() * 5) + 1;
             await sleep(2000 * rand);
-            await barleyFetch();
+            barleyFetch();
             barley = barleyArr[0];
             memo = "feed_animal:"+id;
             await sendToken(res.name, barley, "Feed", memo);   
@@ -1132,7 +1129,7 @@ async function animalTable() {
           else if(res.day_claims_at.length == 6 && res.day_claims_at[0] * multiTime < Date.now() - oneday) {
             let rand = Math.floor(Math.random() * 5) + 1;
             await sleep(2000 * rand);
-            await barleyFetch();
+            barleyFetch();
             barley = barleyArr[0];
             memo = "feed_animal:"+id;
             await sendToken(res.name, barley, "Feed", memo);   
@@ -1142,7 +1139,7 @@ async function animalTable() {
             if(res.day_claims_at.length < 4) {
               let rand = Math.floor(Math.random() * 5) + 1;
               await sleep(2000 * rand);
-            await barleyFetch();
+            barleyFetch();
             barley = barleyArr[0];
             memo = "feed_animal:"+id;
             await sendToken(res.name, barley, "Feed", memo);   
@@ -1150,7 +1147,7 @@ async function animalTable() {
             else if(res.day_claims_at.length == 4 && res.day_claims_at[0] * multiTime < Date.now() - oneday) {
               let rand = Math.floor(Math.random() * 5) + 1;
               await sleep(2000 * rand);
-              await barleyFetch();
+              barleyFetch();
               barley = barleyArr[0];
               memo = "feed_animal:"+id;
               await sendToken(res.name, barley, "Feed", memo);   
@@ -1158,7 +1155,7 @@ async function animalTable() {
           break;
           case "Calf (Male)":
             if(res.day_claims_at.length < 4) {
-            await barleyFetch();
+            barleyFetch();
             barley = barleyArr[0];
             memo = "feed_animal:"+id;
             await sendToken(res.name, barley, "Feed", memo);    
@@ -1166,7 +1163,7 @@ async function animalTable() {
             else if(res.day_claims_at.length == 4 && res.day_claims_at[0] * multiTime < Date.now() - oneday) {
               let rand = Math.floor(Math.random() * 5) + 1;
               await sleep(2000 * rand);
-              await barleyFetch();
+              barleyFetch();
               barley = barleyArr[0];
               memo = "feed_animal:"+id;
               await sendToken(res.name, barley, "Feed", memo);    
@@ -1211,16 +1208,16 @@ async function chkRepair(id, name) {
 /////////////////////////////////////////check refil/////////////////////////////////////////
 async function chkRefill() {
     await getTable("accounts", 1, wax.userAccount)
-    .then((res) => {
+    .then(async (res) => {
       let obj = res.rows[0];
       let refillSetup = localStorage.getItem("refillFw");
       let refillPercen = (obj.max_energy * refillSetup) / 100;
       let amount = obj.max_energy - obj.energy;
       document.getElementById("energy").innerHTML = `${obj.energy}/${obj.max_energy}`;
-      
+      await sleep(5000);
         try {
           if(obj.energy < refillPercen) {
-            let result = wax.api.transact({ 
+            let result = await wax.api.transact({ 
               actions: [{
                 account: 'farmersworld',
                   name: "recover",
@@ -1238,9 +1235,13 @@ async function chkRefill() {
                 expireSeconds: 30
               });
               console.log(result);
-              if(result) {
+              if(result.processed.receipt.status === "executed") {
                 document.getElementById('log').innerHTML += thisTime() + `: เติมเนื้อ สำเร็จ !!! \n`;
                 scrollTextarea(); 
+              }
+              else {
+                document.getElementById('log').innerHTML += thisTime() + `: เติมเนื้อ ไม่สำเร็จ ( ${err.message}) !!! \n`;
+                scrollTextarea();
               }
           }
         }
@@ -1285,7 +1286,7 @@ async function claimTool(id, toolname, typeClaim) {
         }]
       }, {
         blocksBehind: 3,
-        expireSeconds: 60
+        expireSeconds: 120
       });
       document.getElementById('log').innerHTML += thisTime() + `: Claim (${toolname}) สำเร็จ !!! \n`;
       scrollTextarea();
@@ -1412,7 +1413,7 @@ function timeFarm(id, timeStart) {
 async function withdrawnResource() {
   let setTime = 0;
   if(chkFirstTime === false) {
-    setTime = ((Math.floor(Math.random() * 10) + 1)*10000) + 60000;
+    setTime = ((Math.floor(Math.random() * 10) + 1)*10000) + 300000;
   }
   setInterval(async() => {
   let fee;
@@ -1475,12 +1476,12 @@ async function withdrawnResource() {
 async function buyBarleyMarket() {
   let setTime = 0;
   if(chkFirstTime === false) {
-    setTime = ((Math.floor(Math.random() * 10) + 1)*10000) + 20000;
+    setTime = ((Math.floor(Math.random() * 10) + 1)*10000) + 30000;
   }
   setInterval(async() => {
   await barleyFetch();
   let getBarley = localStorage.getItem("barley");
-  if(getBarley === "on" && barleyArr.length <= 5) {
+  if(getBarley === "on" && barleyArr.length <= 7 && barleyArr.length != "") {
     try {
       let result = await wax.api.transact({ 
         actions: [{
@@ -1493,14 +1494,14 @@ async function buyBarleyMarket() {
             data: {
               owner: wax.userAccount,
               template_id: 318606,   
-              quantity: 20       
+              quantity: 25       
             },
           }]
         }, {
           blocksBehind: 3,
           expireSeconds: 30
         });
-        document.getElementById('log').innerHTML += thisTime() + `: ซื้อ Barley 20 ต้น สำเร็จ !!! \n`;
+        document.getElementById('log').innerHTML += thisTime() + `: ซื้อ Barley 25 ต้น สำเร็จ !!! \n`;
         scrollTextarea();
   
       }
@@ -1516,17 +1517,15 @@ async function buyBarleyMarket() {
 async function autoSell() {
   let setTime = 0;
   if(chkFirstTime === false) {
-    setTime = ((Math.floor(Math.random() * 10) + 1)*10000) + 60000;
+    setTime = ((Math.floor(Math.random() * 10) + 1)*10000) + 600000;
   }
   setInterval(async() => {
   await milkFetch();
   await eggFetch();
   let getMilk = localStorage.getItem("milk");
-  let objMilk = JSON.parse(getMilk);
   let getEgg = localStorage.getItem("egg");
-  let objEgg = JSON.parse(getEgg);
 
-  if(objMilk.onoff == "on" && milkArr.length >= 10) {
+  if(getMilk == "on" && milkArr.length >= 20) {
     try {
       let result = await wax.api.transact({ 
         actions: [{
@@ -1549,7 +1548,6 @@ async function autoSell() {
         });
         document.getElementById('log').innerHTML += thisTime() + `: ขาย milk สำเร็จ !!! \n`;
         scrollTextarea();
-  
       }
       catch(err) {
         document.getElementById('log').innerHTML += thisTime() + `: ขาย milk ไม่สำเร็จ ${err.message} !!! \n`;
@@ -1557,7 +1555,7 @@ async function autoSell() {
       }
   }
 
-  if(objEgg.onoff == "on" && eggArr.length >= 10) {
+  if(getEgg == "on" && eggArr.length >= 20) {
     try {
       let result = await wax.api.transact({ 
         actions: [{
@@ -1580,7 +1578,6 @@ async function autoSell() {
         });
         document.getElementById('log').innerHTML += thisTime() + `: ขาย egg สำเร็จ !!! \n`;
         scrollTextarea();
-  
       }
       catch(err) {
         document.getElementById('log').innerHTML += thisTime() + `: ขาย egg ไม่สำเร็จ ${err.message} !!! \n`;
@@ -1594,7 +1591,7 @@ async function autoSell() {
 async function autoCraft() {
   let setTime = 0;
   if(chkFirstTime === false) {
-    setTime = ((Math.floor(Math.random() * 10) + 1)*10000) + 250000;
+    setTime = ((Math.floor(Math.random() * 10) + 1)*10000) + 1200000;
   }
   setInterval(async() => {
   let getfwCoin;
@@ -1645,7 +1642,7 @@ async function autoCraft() {
 async function stuckMember() {
   let setTime = 0;
   if(chkFirstTime === false) {
-    setTime = ((Math.floor(Math.random() * 10) + 1)*10000) + 1800000;
+    setTime = ((Math.floor(Math.random() * 10) + 1)*10000) + 1200000;
   }
   setInterval(async() => {
   let getStuck;
@@ -1695,6 +1692,7 @@ async function stuckMember() {
 //////////////////////////////////////////send token//////////////////////////////////////////
 async function sendToken(name, id, ord, memo) {
   try {
+    await sleep(5000);
     let result = await wax.api.transact({ 
       actions: [{
         account: "atomicassets",
@@ -1728,16 +1726,15 @@ async function sendToken(name, id, ord, memo) {
 //////////////////////////////////////////send token//////////////////////////////////////////
 ////////////////////////////////////atomic inventory//////////////////////////////////////
 async function atomicInven() {
-  
   let getInven = await fetch("https://wax.api.atomicassets.io/atomicassets/v1/assets?collection_name=farmersworld&schema_name=memberships&template_data:text.rarity=Uncommon&limit=10&owner="+wax.userAccount);
-  let inven = await getInven.json();
+  let inven = getInven.json();
   document.getElementById("inventory").innerHTML = "";
   inven.data.forEach((elem, i) => { 
     document.getElementById("inventory").innerHTML += `<img class="center mx-2" src="https://atomichub-ipfs.com/ipfs/${elem.data.img}" style="width: 7%;">`;
   })
 }
 ////////////////////////////////////atomic inventory//////////////////////////////////////
-////////////////////////////////////send resourcey//////////////////////////////////////
+////////////////////////////////////send resource//////////////////////////////////////
 async function sendResource() {
   let setTime = 0;
   if(chkFirstTime === false) {
@@ -1789,4 +1786,4 @@ async function sendResourcetoId(amount, wallet) {
     }      
 }
 
-////////////////////////////////////send resourcey//////////////////////////////////////
+////////////////////////////////////send resource//////////////////////////////////////
