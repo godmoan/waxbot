@@ -189,7 +189,7 @@ function showCooldown() {
     savemode = 0; 
   }
   else {
-    //clearInterval(loopCountdown);
+    clearInterval(loopCountdown);
     savemode = 1;
   }
 }
