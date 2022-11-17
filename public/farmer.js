@@ -1177,7 +1177,6 @@ async function animalTable() {
 ////////////////////////////////////////livestock table///////////////////////////////////////
 /////////////////////////////////////////check repair/////////////////////////////////////////
 async function chkRepair(id, name) {
-  try {
     let result = await wax.api.transact({ 
       actions: [{
         account: 'farmersworld',
@@ -1195,14 +1194,19 @@ async function chkRepair(id, name) {
         blocksBehind: 3,
         expireSeconds: 30
       });
-      document.getElementById('log').innerHTML += thisTime() + `: Repair (${name}) สำเร็จ !!! \n`;
-      scrollTextarea();
+      if (result.processed.receipt.status === "executed") {
+        document.getElementById('log').innerHTML += thisTime() + `: Repair (${name}) สำเร็จ !!! \n`;
+        scrollTextarea();
+      }
+      else {
+        document.getElementById('log').innerHTML += thisTime() + `: Repair (${name}) ไม่สำเร็จ ( ${result.processed.receipt.status}) !!! \n`;
+        scrollTextarea();
+      }
 
-    }
-    catch(err) {
-      document.getElementById('log').innerHTML += thisTime() + `: Repair (${name}) ไม่สำเร็จ ( ${err.message}) !!! \n`;
-      scrollTextarea();
-    }
+
+
+
+    
 }
 /////////////////////////////////////////check repair/////////////////////////////////////////
 /////////////////////////////////////////check refil/////////////////////////////////////////
@@ -1234,13 +1238,12 @@ async function chkRefill() {
                 blocksBehind: 3,
                 expireSeconds: 30
               });
-              console.log(result);
-              if(result.processed.receipt.status === "executed") {
+              if (result.processed.receipt.status === "executed") {
                 document.getElementById('log').innerHTML += thisTime() + `: เติมเนื้อ สำเร็จ !!! \n`;
                 scrollTextarea(); 
               }
               else {
-                document.getElementById('log').innerHTML += thisTime() + `: เติมเนื้อ ไม่สำเร็จ ( ${err.message}) !!! \n`;
+                document.getElementById('log').innerHTML += thisTime() + `: เติมเนื้อ ไม่สำเร็จ ( ${result.processed.receipt.status}) !!! \n`;
                 scrollTextarea();
               }
           }
@@ -1270,7 +1273,7 @@ async function plusBtn(val)  {
 /////////////////////////////////////////minus btn/////////////////////////////////////////
 /////////////////////////////////////////claim tool//////////////////////////////////////////
 async function claimTool(id, toolname, typeClaim) {
-  try {
+  //try {
     let result = await wax.api.transact({ 
       actions: [{
         account: 'farmersworld',
@@ -1288,14 +1291,14 @@ async function claimTool(id, toolname, typeClaim) {
         blocksBehind: 3,
         expireSeconds: 120
       });
-      document.getElementById('log').innerHTML += thisTime() + `: Claim (${toolname}) สำเร็จ !!! \n`;
-      scrollTextarea();
-
-    }
-    catch(err) {
-      document.getElementById('log').innerHTML += thisTime() + `: Claim (${toolname}) ไม่สำเร็จ ( ${err.message}) !!! \n`;
-      scrollTextarea();
-    }
+      if (result.processed.receipt.status === "executed") {
+        document.getElementById('log').innerHTML += thisTime() + `: Claim (${toolname}) สำเร็จ !!! \n`;
+        scrollTextarea();
+      }
+      else {
+        document.getElementById('log').innerHTML += thisTime() + `: Claim (${toolname}) ไม่สำเร็จ ( ${result.processed.receipt.status}) !!! \n`;
+        scrollTextarea();
+      }   
 }
 /////////////////////////////////////////claim tool//////////////////////////////////////////
 /////////////////////////////////////////claim farm//////////////////////////////////////////
@@ -1329,6 +1332,38 @@ async function claimFarm(id, toolname, typeClaim) {
     }
 }
 /////////////////////////////////////////claim farm//////////////////////////////////////////
+
+//////////////////////////////////////claim livestock////////////////////////////////////////
+async function claimAni(id, toolname, typeClaim) {
+  try {
+    let result = await wax.api.transact({ 
+      actions: [{
+        account: 'farmersworld',
+          name: typeClaim,
+          authorization: [{
+            actor: wax.userAccount,
+            permission: 'active',
+          }],
+          data: {
+            owner: wax.userAccount,
+            animal_id: id,
+          },
+        }]
+      }, {
+        blocksBehind: 3,
+        expireSeconds: 30
+      });
+      document.getElementById('log').innerHTML += thisTime() + `: Claim (${toolname}) สำเร็จ !!! \n`;
+      scrollTextarea();
+
+    }
+    catch(err) {
+      console.log(err);
+      document.getElementById('log').innerHTML += thisTime() + `: Claim (${toolname}) ไม่สำเร็จ ( ${err.message}) !!! \n`;
+      scrollTextarea();
+    }
+}
+//////////////////////////////////////claim livestock////////////////////////////////////////
 
 /////////////////////////////////////////countdown///////////////////////////////////////////
 async function countDown() {
@@ -1428,10 +1463,9 @@ async function withdrawnResource() {
 
 
   if(fee == 5 && getToggle == "on" && foodIngame > getFood && woodIngame > getWood && goldIngame > getGold) {
-    let resultWood = woodIngame + ".0000 WOOD";
-    let resultGold = (goldIngame - getStore) + ".0000 GOLD";
-    let resultFood = (foodIngame - getStore) + ".0000 FOOD";
-
+    let resultWood = (woodIngame - 1) + ".0000 WOOD";
+    let resultGold = ((goldIngame - 1) - getStore) + ".0000 GOLD";
+    let resultFood = ((foodIngame - 1) - getStore) + ".0000 FOOD";
     try {
       let result = await wax.api.transact({ 
         actions: [{
@@ -1465,7 +1499,7 @@ async function withdrawnResource() {
         console.log(err);
         document.getElementById('log').innerHTML += thisTime() + `: Withdraw ไม่สำเร็จ ( ${err.message}) !!! \n`;
         scrollTextarea();
-        sleep(20000);
+        await sleep(60000);
         withdrawnResource()
     }
   }
@@ -1691,8 +1725,6 @@ async function stuckMember() {
 //////////////////////////////////////stuck member////////////////////////////////////////
 //////////////////////////////////////////send token//////////////////////////////////////////
 async function sendToken(name, id, ord, memo) {
-  try {
-    await sleep(5000);
     let result = await wax.api.transact({ 
       actions: [{
         account: "atomicassets",
@@ -1714,14 +1746,14 @@ async function sendToken(name, id, ord, memo) {
         blocksBehind: 3,
         expireSeconds: 30
       });
-      document.getElementById('log').innerHTML += thisTime() + `: ${ord} ${name} สำเร็จ !!! \n`;
-      scrollTextarea();
-
-    }
-    catch(err) {
-      document.getElementById('log').innerHTML += thisTime() + `: ${ord} ${name} ${err.message} !!! \n`;
-      scrollTextarea();
-    }
+      if (result.processed.receipt.status === "executed") {
+        document.getElementById('log').innerHTML += thisTime() + `: ${ord} ${name} สำเร็จ !!! \n`;
+        scrollTextarea();
+      }
+      else {
+        document.getElementById('log').innerHTML += thisTime() + `: ${ord} ${name} ${err.message} !!! \n`;
+        scrollTextarea();
+      }
 }
 //////////////////////////////////////////send token//////////////////////////////////////////
 ////////////////////////////////////atomic inventory//////////////////////////////////////
