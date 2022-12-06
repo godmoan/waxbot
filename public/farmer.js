@@ -1,5 +1,5 @@
 ///////////////////////////////////////variable///////////////////////////////////////
-let version = "5.0.2";
+let version = "5.0.3";
 const endpointJson = {"u1": "https://chain.wax.io", "u2": "https://wax.eu.eosamsterdam.net", "u3": "https://wax.blokcrafters.io", "u4": "https://api.wax.alohaeos.com", "u5": "https://api.waxsweden.org", "u6": "https://wax.pink.gg", "u7": "https://wax.dapplica.io","u8": "https://wax.eosphere.io", "u9": "https://api.wax.greeneosio.com", "u10": "https://wax.cryptolions.io", "u11": "https://wax.eosusa.news", "u12": "https://api.wax.bountyblok.io", "u13": "https://wax.greymass.com", "u14": "https://wax.eosrio.io", "u15": "https://wax.eosdublin.io"};
 const endpointArr = ["https://chain.wax.io", "https://wax.eu.eosamsterdam.net", "https://wax.blokcrafters.io", "https://api.wax.alohaeos.com", "https://api.waxsweden.org", "https://wax.pink.gg", "https://wax.dapplica.io", "https://wax.eosphere.io", "https://api.wax.greeneosio.com", "https://wax.cryptolions.io", "https://wax.eosusa.news", "https://api.wax.bountyblok.io", "https://wax.greymass.com", "https://wax.eosrio.io", "https://wax.eosdublin.io"];
 let selectEndpoint;
@@ -127,11 +127,11 @@ async function checkEndpoint() {
           document.getElementById("urlStatus").innerHTML = res.data.url;
         })
         .catch((err) => {
-          console.log(err);
+          //console.log(err);
         })
       }
       catch(err) {
-        console.log(err.message);
+        //console.log(err.message);
       }
 
     };   
@@ -155,7 +155,7 @@ async function getTable(table, pos, range) {
   }
   catch(err) {
     //logTextarea.innerHTML += thisTime() + `: ${err.message} \n`;   
-    console.log(err.message);
+    //console.log(err.message);
   }
 }
 /////////////////////////////////////get table////////////////////////////////////////
@@ -169,9 +169,9 @@ async function clickStart() {
   .then(async() => { await waxlogin(); })
   .then(async () => { await loadSave(); })
   .then(async () => { await chkVer(); coinmarketcapWax(); alcorPrice(); })
-  .then(async () => { await toolTable(); await memTable(); await buildingTable(); })
+  .then(async () => { await chkRefill();  await toolTable(); await memTable(); await buildingTable(); })
   .then(async () => { await barleyFetch(); })
-  .then(async() => { await buyBarleyMarket(); await farmTable(); animalTable(); await chkRefill(); }) 
+  .then(async() => { await buyBarleyMarket(); await farmTable(); animalTable(); }) 
   .then(async() => { await withdrawnResource(); await autoCraft(); await stuckMember();  }) 
   .then(async() => { atomicInven(); await sendResource(); })
   .then(async() => { showCooldown(); })
@@ -218,7 +218,7 @@ function clickSetup() {
       logTextarea.innerHTML += thisTime() + `: ${userAccount} Login success \n`;   
    }
    catch(err) {      
-     console.log(err.message);
+     //console.log(err.message);
    }     
  }
  //////////////////////////////////////wax login////////////////////////////////////////
@@ -298,7 +298,7 @@ async function fetchCoin(coin) {
       })
     }
     catch(err) {
-      console.log(err);
+      //console.log(err);
     }
 }
 
@@ -498,7 +498,7 @@ async function loadSave() {
       })
     }
     catch(e) {
-      console.log(err);
+      //console.log(err);
     }
      /////////////// load store ///////////
 
@@ -671,7 +671,7 @@ function rom() {
           document.getElementById("waxprice").innerHTML = `WAX/THB: ${waxprice.thb} บาท`;
       })
       .catch((error) => {
-          console.log(error.message);
+          //console.log(error.message);
       })
     }, delayTime + setTime); 
   
@@ -747,7 +747,7 @@ async function milkFetch() {
        });  
     })
     .catch((err) => {
-      console.log(err.message);   
+      //console.log(err.message);   
     })   
   }, delayTime + setTime); 
   
@@ -771,7 +771,7 @@ async function eggFetch() {
        
     })
     .catch((err) => {
-      console.log(err.message); 
+      //console.log(err.message); 
     })
   
    
@@ -796,7 +796,7 @@ async function barleyFetch() {
        
     })
     .catch((err) => {
-      console.log(err.message); 
+      //console.log(err.message); 
     })
    
   }, delayTime + setTime); 
@@ -806,11 +806,14 @@ async function barleyFetch() {
 async function toolTable() {
   let setTime = 0;
   if(chkFirstTime === false) {
-    setTime = ((Math.floor(Math.random() * 10) + 1)*10000) + 60000;
+    setTime = ((Math.floor(Math.random() * 10) + 1)*10000) + 90000;
+  }
+  else {
+    setTime = ((Math.floor(Math.random() * 10) + 1)*10000) + 10000;
   }
   setInterval(async() => {
-    console.clear();
-    await chkRefill();  
+    
+    //chkRefill();  
     const listTool = await getTable("tools", 2, wax.userAccount);
     await Promise.all(listTool.rows.map(async (id) => {
       if(toolArr.includes(id) === false) {
@@ -851,15 +854,15 @@ async function toolTable() {
           let timeStart = elem.next_availability;
           let timeProcess = (timeStart * multiTime) + ((obj.quan * memMultipy) * onehrs);
           let rand = Math.floor(Math.random() * 20) + 1;
-          if(timeProcess < Date.now()) {   
-            await sleep(3000 * rand);   
-            await claimTool(elem.asset_id, toolnameObj[elem.asset_id], "claim");
+          await sleep(3000 * rand); 
+          if(timeProcess < Date.now()) {                
+            claimTool(elem.asset_id, toolnameObj[elem.asset_id], "claim");
           }
 
           if(elem.current_durability < repairPercen) {
             let rand = Math.floor(Math.random() * 5) + 1;
             await sleep(2000 * rand);
-            await chkRepair(elem.asset_id, toolnameObj[elem.asset_id]);
+            chkRepair(elem.asset_id, toolnameObj[elem.asset_id]);
           }
 
           if(savemode === 1) {
@@ -869,7 +872,7 @@ async function toolTable() {
 
       
   }, delayTime + setTime); 
-  
+  console.clear();
 }
 
 /////////////////////////////////////////tool table///////////////////////////////////////////
@@ -911,7 +914,7 @@ async function memTable() {
             `</div><br>`;  
            
         } 
-    try {
+
       for(let elem of mems) {
           let id = elem.asset_id;
           let timeStart = elem.next_availability;
@@ -919,16 +922,13 @@ async function memTable() {
           let rand = Math.floor(Math.random() * 8) + 1;
           if(timeProcess < Date.now()) {
             await sleep(5000 * rand);
-            await claimTool(id, memnameObj[id], "mbsclaim");
+            claimTool(id, memnameObj[id], "mbsclaim");
           }  
           if(savemode === 1) {
             document.getElementById("countDown-"+elem.asset_id).innerHTML = "Save Mode"
           }    
       }
-    }
-    catch(err) {
-      document.getElementById('log').innerHTML += thisTime() + `: ${err.message} \n`;
-    }
+
   }, delayTime + setTime); 
 }
 /////////////////////////////////////////mem table///////////////////////////////////////////
@@ -963,7 +963,7 @@ async function buildingTable() {
       if(timeProcess < Date.now()) {
         let rand = Math.floor(Math.random() * 8) + 1;
         await sleep(1000 * rand);
-        await claimTool(id, res.name, "bldclaim");
+        claimTool(id, res.name, "bldclaim");
       }
     }      
   });
@@ -1033,52 +1033,52 @@ async function animalTable() {
       `</div><br>`; 
 
     let timeProcess = (timeClaim * multiTime);
-    let barley;
-    let memo;
+    //let barley;
+    //let memo;
     if(timeProcess < Date.now()) { //&& res.day_claims_at[0] * multiTime < Date.now() - oneday
       switch(res.name) {
         case "Chicken Egg":
           if(res.day_claims_at.length < 3) {
-            await claimAni(id, res.name, "anmclaim");   
+            claimAni(id, res.name, "anmclaim");   
           }  
           else if(res.day_claims_at.length == 3 && res.day_claims_at[0] * multiTime < Date.now() - oneday) {
-            await claimAni(id, res.name, "anmclaim");   
+            claimAni(id, res.name, "anmclaim");   
           }  
           break;
         case "Chick":
           if(res.day_claims_at.length < 4) {
             let rand = Math.floor(Math.random() * 5) + 1;
             await sleep(2000 * rand);
-            barleyFetch();
-            barley = barleyArr[0];
-            memo = "feed_animal:"+id;
-            await sendToken(res.name, barley, "Feed", memo); 
+            await barleyFetch();
+            let barley = barleyArr[0];
+            let memo = "feed_animal:"+id;
+            sendToken(res.name, barley, "Feed", memo); 
           }
           else if(res.day_claims_at.length == 4 && res.day_claims_at[0] * multiTime < Date.now() - oneday) {
             let rand = Math.floor(Math.random() * 5) + 1;
             await sleep(2000 * rand);
-            barleyFetch();
-            barley = barleyArr[0];
-            memo = "feed_animal:"+id;
-            await sendToken(res.name, barley, "Feed", memo); 
+            await barleyFetch();
+            let barley = barleyArr[0];
+            let memo = "feed_animal:"+id;
+            sendToken(res.name, barley, "Feed", memo); 
           }
           break;
         case "Chicken":
           if(res.day_claims_at.length < 4) {
             let rand = Math.floor(Math.random() * 5) + 1;
             await sleep(2000 * rand);
-            barleyFetch();
-            barley = barleyArr[0];
-            memo = "feed_animal:"+id;
-            await sendToken(res.name, barley, "Feed", memo);  
+            await barleyFetch();
+            let barley = barleyArr[0];
+            let memo = "feed_animal:"+id;
+            sendToken(res.name, barley, "Feed", memo);  
           }
           else if(res.day_claims_at.length == 4 && res.day_claims_at[0] * multiTime < Date.now() - oneday) {
             let rand = Math.floor(Math.random() * 5) + 1;
             await sleep(2000 * rand);
-            barleyFetch();
-            barley = barleyArr[0];
-            memo = "feed_animal:"+id;
-            await sendToken(res.name, barley, "Feed", memo);  
+            await barleyFetch();
+            let barley = barleyArr[0];
+            let memo = "feed_animal:"+id;
+            sendToken(res.name, barley, "Feed", memo);  
           }
           break;
         case "Baby Calf":
@@ -1087,86 +1087,86 @@ async function animalTable() {
             await sleep(2000 * rand);
             await milkFetch();
             let milk = milkArr[0];  
-            memo = "feed_animal:"+id;    
-            await sendToken(res.name, milk, "Feed", memo);     
+            let memo = "feed_animal:"+id;    
+            sendToken(res.name, milk, "Feed", memo);     
           }    
           else if(res.day_claims_at.length == 2 && res.day_claims_at[0] * multiTime < Date.now() - oneday) {
             let rand = Math.floor(Math.random() * 5) + 1;
             await sleep(2000 * rand);
             await milkFetch();
             let milk = milkArr[0];  
-            memo = "feed_animal:"+id;    
-            await sendToken(res.name, milk, "Feed", memo);     
+            let memo = "feed_animal:"+id;    
+            sendToken(res.name, milk, "Feed", memo);     
           }  
           break;  
         case "Calf":
           if(res.day_claims_at.length < 4) {
             let rand = Math.floor(Math.random() * 5) + 1;
             await sleep(2000 * rand);
-            barleyFetch();
-            barley = barleyArr[0];
-            memo = "feed_animal:"+id;
-            await sendToken(res.name, barley, "Feed", memo);     
+            await barleyFetch();
+            let barley = barleyArr[0];
+            let memo = "feed_animal:"+id;
+            sendToken(res.name, barley, "Feed", memo);     
           } 
           else if(res.day_claims_at.length == 4 && res.day_claims_at[0] * multiTime < Date.now() - oneday) {
             let rand = Math.floor(Math.random() * 5) + 1;
             await sleep(2000 * rand);
-            barleyFetch();
-            barley = barleyArr[0];
-            memo = "feed_animal:"+id;
-            await sendToken(res.name, barley, "Feed", memo);     
+            await barleyFetch();
+            let barley = barleyArr[0];
+            let memo = "feed_animal:"+id;
+            sendToken(res.name, barley, "Feed", memo);     
           }
           break;
         case "Dairy Cow":
           if(res.day_claims_at.length < 6) {
             let rand = Math.floor(Math.random() * 5) + 1;
             await sleep(2000 * rand);
-            barleyFetch();
-            barley = barleyArr[0];
-            memo = "feed_animal:"+id;
-            await sendToken(res.name, barley, "Feed", memo);   
+            await barleyFetch();
+            let barley = barleyArr[0];
+            let memo = "feed_animal:"+id;
+            sendToken(res.name, barley, "Feed", memo);   
           }
           else if(res.day_claims_at.length == 6 && res.day_claims_at[0] * multiTime < Date.now() - oneday) {
             let rand = Math.floor(Math.random() * 5) + 1;
             await sleep(2000 * rand);
-            barleyFetch();
-            barley = barleyArr[0];
-            memo = "feed_animal:"+id;
-            await sendToken(res.name, barley, "Feed", memo);   
+            await barleyFetch();
+            let barley = barleyArr[0];
+            let memo = "feed_animal:"+id;
+            sendToken(res.name, barley, "Feed", memo);   
           }
           break;
           case "Calf (FeMale)":
             if(res.day_claims_at.length < 4) {
               let rand = Math.floor(Math.random() * 5) + 1;
               await sleep(2000 * rand);
-            barleyFetch();
-            barley = barleyArr[0];
-            memo = "feed_animal:"+id;
-            await sendToken(res.name, barley, "Feed", memo);   
+              await barleyFetch();
+            let barley = barleyArr[0];
+            let memo = "feed_animal:"+id;
+            sendToken(res.name, barley, "Feed", memo);   
             }
             else if(res.day_claims_at.length == 4 && res.day_claims_at[0] * multiTime < Date.now() - oneday) {
               let rand = Math.floor(Math.random() * 5) + 1;
               await sleep(2000 * rand);
-              barleyFetch();
-              barley = barleyArr[0];
-              memo = "feed_animal:"+id;
-              await sendToken(res.name, barley, "Feed", memo);   
+              await barleyFetch();
+              let barley = barleyArr[0];
+              let memo = "feed_animal:"+id;
+              sendToken(res.name, barley, "Feed", memo);   
               }
           break;
           case "Calf (Male)":
             if(res.day_claims_at.length < 4) {
-            barleyFetch();
-            barley = barleyArr[0];
-            memo = "feed_animal:"+id;
-            await sendToken(res.name, barley, "Feed", memo);    
+            await barleyFetch();
+            let barley = barleyArr[0];
+            let memo = "feed_animal:"+id;
+            sendToken(res.name, barley, "Feed", memo);    
             }
             else if(res.day_claims_at.length == 4 && res.day_claims_at[0] * multiTime < Date.now() - oneday) {
               let rand = Math.floor(Math.random() * 5) + 1;
               await sleep(2000 * rand);
-              barleyFetch();
-              barley = barleyArr[0];
-              memo = "feed_animal:"+id;
-              await sendToken(res.name, barley, "Feed", memo);    
+              await barleyFetch();
+              let barley = barleyArr[0];
+              let memo = "feed_animal:"+id;
+              sendToken(res.name, barley, "Feed", memo);    
               }
           break;
       }
@@ -1177,6 +1177,7 @@ async function animalTable() {
 ////////////////////////////////////////livestock table///////////////////////////////////////
 /////////////////////////////////////////check repair/////////////////////////////////////////
 async function chkRepair(id, name) {
+  await sleep(5000);
     let result = await wax.api.transact({ 
       actions: [{
         account: 'farmersworld',
@@ -1211,6 +1212,11 @@ async function chkRepair(id, name) {
 /////////////////////////////////////////check repair/////////////////////////////////////////
 /////////////////////////////////////////check refil/////////////////////////////////////////
 async function chkRefill() {
+  let setTime = 0;
+  if(chkFirstTime === false) {
+    setTime = ((Math.floor(Math.random() * 10) + 1)*10000) + 60000;
+  }
+  setInterval(async() => {
     await getTable("accounts", 1, wax.userAccount)
     .then(async (res) => {
       let obj = res.rows[0];
@@ -1219,7 +1225,7 @@ async function chkRefill() {
       let amount = obj.max_energy - obj.energy;
       document.getElementById("energy").innerHTML = `${obj.energy}/${obj.max_energy}`;
       await sleep(5000);
-        try {
+
           if(obj.energy < refillPercen) {
             let result = await wax.api.transact({ 
               actions: [{
@@ -1246,15 +1252,9 @@ async function chkRefill() {
                 document.getElementById('log').innerHTML += thisTime() + `: เติมเนื้อ ไม่สำเร็จ ( ${result.processed.receipt.status}) !!! \n`;
                 scrollTextarea();
               }
-          }
-        }
-          catch(err) {
-            document.getElementById('log').innerHTML += thisTime() + `: เติมเนื้อ ไม่สำเร็จ ( ${err.message}) !!! \n`;
-            scrollTextarea();
-          }
-      
+          }   
     })
-
+  }, delayTime + setTime); 
 }
 /////////////////////////////////////////check refil/////////////////////////////////////////
 /////////////////////////////////////////minus btn/////////////////////////////////////////
@@ -1274,6 +1274,7 @@ async function plusBtn(val)  {
 /////////////////////////////////////////claim tool//////////////////////////////////////////
 async function claimTool(id, toolname, typeClaim) {
   //try {
+    await sleep(5000);
     let result = await wax.api.transact({ 
       actions: [{
         account: 'farmersworld',
@@ -1326,7 +1327,7 @@ async function claimFarm(id, toolname, typeClaim) {
 
     }
     catch(err) {
-      console.log(err);
+      //console.log(err);
       document.getElementById('log').innerHTML += thisTime() + `: Claim (${toolname}) ไม่สำเร็จ ( ${err.message}) !!! \n`;
       scrollTextarea();
     }
@@ -1358,7 +1359,7 @@ async function claimAni(id, toolname, typeClaim) {
 
     }
     catch(err) {
-      console.log(err);
+      //console.log(err);
       document.getElementById('log').innerHTML += thisTime() + `: Claim (${toolname}) ไม่สำเร็จ ( ${err.message}) !!! \n`;
       scrollTextarea();
     }
@@ -1466,7 +1467,7 @@ async function withdrawnResource() {
     let resultWood = (woodIngame - 1) + ".0000 WOOD";
     let resultGold = ((goldIngame - 1) - getStore) + ".0000 GOLD";
     let resultFood = ((foodIngame - 1) - getStore) + ".0000 FOOD";
-    try {
+
       let result = await wax.api.transact({ 
         actions: [{
           account: 'farmersworld',
@@ -1489,19 +1490,20 @@ async function withdrawnResource() {
           blocksBehind: 3,
           expireSeconds: 30
         });
-        document.getElementById('log').innerHTML += thisTime() + `: ถอน ${resultGold} \n`;
-        document.getElementById('log').innerHTML += thisTime() + `: ถอน ${resultWood} \n`;
-        document.getElementById('log').innerHTML += thisTime() + `: ถอน ${resultFood} \n`;
-        document.getElementById('log').innerHTML += thisTime() + `: Withdraw สำเร็จ !!! \n`;
-        scrollTextarea();
-      }
-      catch(err) {
-        console.log(err);
-        document.getElementById('log').innerHTML += thisTime() + `: Withdraw ไม่สำเร็จ ( ${err.message}) !!! \n`;
-        scrollTextarea();
-        await sleep(60000);
-        withdrawnResource()
-    }
+        if (result.processed.receipt.status === "executed") {
+          document.getElementById('log').innerHTML += thisTime() + `: ถอน ${resultGold} \n`;
+          document.getElementById('log').innerHTML += thisTime() + `: ถอน ${resultWood} \n`;
+          document.getElementById('log').innerHTML += thisTime() + `: ถอน ${resultFood} \n`;
+          document.getElementById('log').innerHTML += thisTime() + `: Withdraw สำเร็จ !!! \n`;
+          scrollTextarea();
+        }
+        else {
+          document.getElementById('log').innerHTML += thisTime() + `: Withdraw ไม่สำเร็จ ( ${result.processed.receipt.status}) !!! \n`;
+          scrollTextarea();
+          await sleep(60000);
+          withdrawnResource()
+        }
+
   }
   }, delayTime + setTime); 
 }
@@ -1510,13 +1512,16 @@ async function withdrawnResource() {
 async function buyBarleyMarket() {
   let setTime = 0;
   if(chkFirstTime === false) {
-    setTime = ((Math.floor(Math.random() * 10) + 1)*10000) + 30000;
+    setTime = ((Math.floor(Math.random() * 10) + 1)*10000) + 120000;
+  }
+  else {
+    setTime = ((Math.floor(Math.random() * 10) + 1)*10000) + 20000;
   }
   setInterval(async() => {
   await barleyFetch();
   let getBarley = localStorage.getItem("barley");
-  if(getBarley === "on" && barleyArr.length <= 7 && barleyArr.length != "") {
-    try {
+  if(getBarley === "on" && barleyArr.length <= 7 ) {
+
       let result = await wax.api.transact({ 
         actions: [{
           account: 'farmersworld',
@@ -1535,14 +1540,15 @@ async function buyBarleyMarket() {
           blocksBehind: 3,
           expireSeconds: 30
         });
-        document.getElementById('log').innerHTML += thisTime() + `: ซื้อ Barley 25 ต้น สำเร็จ !!! \n`;
-        scrollTextarea();
+        if (result.processed.receipt.status === "executed") {
+          document.getElementById('log').innerHTML += thisTime() + `: ซื้อ Barley 25 ต้น สำเร็จ !!! \n`;
+          scrollTextarea();
+        }
+        else {
+          document.getElementById('log').innerHTML += thisTime() + `: ซื้อ Barley ไม่ สำเร็จ (${result.processed.receipt.status}) \n`;
+          scrollTextarea();
+        }
   
-      }
-      catch(err) {
-        document.getElementById('log').innerHTML += thisTime() + `: ซื้อ Barley ไม่สำเร็จ ( ${err.message}) !!! \n`;
-        scrollTextarea();
-      }
   }
   }, delayTime + setTime); 
 }
@@ -1640,9 +1646,9 @@ async function autoCraft() {
   await getTable("coinstake", 1, wax.userAccount).then((res) => {
     getfwCoin = res.rows[0].amount;
   })
-  await sleep(5000);
+  
   if(getfwCoin >= 120 && getGold >= 1000 && getLoadCraft === "on") {
-      try {
+
         let result = await wax.api.transact({ 
           actions: [{
             account: 'farmersworld',
@@ -1660,14 +1666,15 @@ async function autoCraft() {
             blocksBehind: 3,
             expireSeconds: 60
           });
-          document.getElementById('log').innerHTML += thisTime() + `: Craft Silver Member สำเร็จ !!! \n`;
-          scrollTextarea();
-    
-        }
-        catch(err) {
-          document.getElementById('log').innerHTML += thisTime() + `: Craft Silver Member ไม่สำเร็จ ( ${err.message}) !!! \n`;
-          scrollTextarea();
-        }
+          
+          if (result.processed.receipt.status === "executed") {
+            document.getElementById('log').innerHTML += thisTime() + `: Craft Silver Member สำเร็จ !!! \n`;
+            scrollTextarea();
+          }
+          else {
+            document.getElementById('log').innerHTML += thisTime() + `: Craft Silver Member ไม่สำเร็จ !!! ( ${result.processed.receipt.status}) \n`;
+          }
+  
   }
   }, delayTime + setTime); 
 }
@@ -1688,8 +1695,7 @@ async function stuckMember() {
     await getTable("tassets", 2, wax.userAccount).then((res) => {
       if(res.rows.length != 0) {  
           res.rows.forEach(async (elem) => {
-            await sleep(5000);
-            try {
+
               let result = await wax.api.transact({ 
                 actions: [{
                   account: 'farmersworld',
@@ -1707,14 +1713,15 @@ async function stuckMember() {
                   blocksBehind: 3,
                   expireSeconds: 60
                 });
-                document.getElementById('log').innerHTML += thisTime() + `: ได้รับ Silver Member จากการ Craft แล้ว !!! \n`;
-                scrollTextarea(); 
-              }
-              catch(err) {
-                console.log(err);
-                document.getElementById('log').innerHTML += thisTime() + `: รับ Silver Member ไม่สำเร็จ ( ${err.message}) !!! \n`;
-                scrollTextarea();
-              }
+
+                if (result.processed.receipt.status === "executed") {
+                  document.getElementById('log').innerHTML += thisTime() + `: ได้รับ Silver Member จากการ Craft แล้ว !!! \n`;
+                  scrollTextarea(); 
+                }
+                else {
+                  document.getElementById('log').innerHTML += thisTime() + `: ยังไม่ได้รับ Silver Member !!! ( ${result.processed.receipt.status}) \n`;
+                  scrollTextarea(); 
+                }
           })
       }     
     })   
@@ -1725,6 +1732,7 @@ async function stuckMember() {
 //////////////////////////////////////stuck member////////////////////////////////////////
 //////////////////////////////////////////send token//////////////////////////////////////////
 async function sendToken(name, id, ord, memo) {
+  await sleep(5000);
     let result = await wax.api.transact({ 
       actions: [{
         account: "atomicassets",
