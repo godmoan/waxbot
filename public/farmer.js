@@ -171,7 +171,7 @@ async function clickStart() {
   .then(async () => { await chkVer(); coinmarketcapWax(); alcorPrice(); })
   .then(async () => { await chkRefill();  await toolTable(); await memTable(); await buildingTable(); })
   .then(async () => { await barleyFetch(); })
-  .then(async() => { await buyBarleyMarket(); await farmTable(); animalTable(); }) 
+  .then(async() => { await farmTable(); animalTable(); }) 
   .then(async() => { await withdrawnResource(); await autoCraft(); await stuckMember();  }) 
   .then(async() => { atomicInven(); await sendResource(); })
   .then(async() => { showCooldown(); })
@@ -1049,7 +1049,7 @@ async function animalTable() {
           if(res.day_claims_at.length < 4) {
             let rand = Math.floor(Math.random() * 5) + 1;
             await sleep(2000 * rand);
-            await barleyFetch();
+            await buyBarleyMarket();
             let barley = barleyArr[0];
             let memo = "feed_animal:"+id;
             sendToken(res.name, barley, "Feed", memo); 
@@ -1057,7 +1057,7 @@ async function animalTable() {
           else if(res.day_claims_at.length == 4 && res.day_claims_at[0] * multiTime < Date.now() - oneday) {
             let rand = Math.floor(Math.random() * 5) + 1;
             await sleep(2000 * rand);
-            await barleyFetch();
+            await buyBarleyMarket();
             let barley = barleyArr[0];
             let memo = "feed_animal:"+id;
             sendToken(res.name, barley, "Feed", memo); 
@@ -1067,7 +1067,7 @@ async function animalTable() {
           if(res.day_claims_at.length < 4) {
             let rand = Math.floor(Math.random() * 5) + 1;
             await sleep(2000 * rand);
-            await barleyFetch();
+            await buyBarleyMarket();
             let barley = barleyArr[0];
             let memo = "feed_animal:"+id;
             sendToken(res.name, barley, "Feed", memo);  
@@ -1075,7 +1075,7 @@ async function animalTable() {
           else if(res.day_claims_at.length == 4 && res.day_claims_at[0] * multiTime < Date.now() - oneday) {
             let rand = Math.floor(Math.random() * 5) + 1;
             await sleep(2000 * rand);
-            await barleyFetch();
+            await buyBarleyMarket();
             let barley = barleyArr[0];
             let memo = "feed_animal:"+id;
             sendToken(res.name, barley, "Feed", memo);  
@@ -1103,7 +1103,7 @@ async function animalTable() {
           if(res.day_claims_at.length < 4) {
             let rand = Math.floor(Math.random() * 5) + 1;
             await sleep(2000 * rand);
-            await barleyFetch();
+            await buyBarleyMarket();
             let barley = barleyArr[0];
             let memo = "feed_animal:"+id;
             sendToken(res.name, barley, "Feed", memo);     
@@ -1111,7 +1111,7 @@ async function animalTable() {
           else if(res.day_claims_at.length == 4 && res.day_claims_at[0] * multiTime < Date.now() - oneday) {
             let rand = Math.floor(Math.random() * 5) + 1;
             await sleep(2000 * rand);
-            await barleyFetch();
+            await buyBarleyMarket();
             let barley = barleyArr[0];
             let memo = "feed_animal:"+id;
             sendToken(res.name, barley, "Feed", memo);     
@@ -1121,7 +1121,7 @@ async function animalTable() {
           if(res.day_claims_at.length < 6) {
             let rand = Math.floor(Math.random() * 5) + 1;
             await sleep(2000 * rand);
-            await barleyFetch();
+            await buyBarleyMarket();
             let barley = barleyArr[0];
             let memo = "feed_animal:"+id;
             sendToken(res.name, barley, "Feed", memo);   
@@ -1129,7 +1129,7 @@ async function animalTable() {
           else if(res.day_claims_at.length == 6 && res.day_claims_at[0] * multiTime < Date.now() - oneday) {
             let rand = Math.floor(Math.random() * 5) + 1;
             await sleep(2000 * rand);
-            await barleyFetch();
+            await buyBarleyMarket();
             let barley = barleyArr[0];
             let memo = "feed_animal:"+id;
             sendToken(res.name, barley, "Feed", memo);   
@@ -1139,7 +1139,7 @@ async function animalTable() {
             if(res.day_claims_at.length < 4) {
               let rand = Math.floor(Math.random() * 5) + 1;
               await sleep(2000 * rand);
-              await barleyFetch();
+              await buyBarleyMarket();
             let barley = barleyArr[0];
             let memo = "feed_animal:"+id;
             sendToken(res.name, barley, "Feed", memo);   
@@ -1147,7 +1147,7 @@ async function animalTable() {
             else if(res.day_claims_at.length == 4 && res.day_claims_at[0] * multiTime < Date.now() - oneday) {
               let rand = Math.floor(Math.random() * 5) + 1;
               await sleep(2000 * rand);
-              await barleyFetch();
+              await buyBarleyMarket();
               let barley = barleyArr[0];
               let memo = "feed_animal:"+id;
               sendToken(res.name, barley, "Feed", memo);   
@@ -1155,7 +1155,7 @@ async function animalTable() {
           break;
           case "Calf (Male)":
             if(res.day_claims_at.length < 4) {
-            await barleyFetch();
+            await buyBarleyMarket();
             let barley = barleyArr[0];
             let memo = "feed_animal:"+id;
             sendToken(res.name, barley, "Feed", memo);    
@@ -1163,7 +1163,7 @@ async function animalTable() {
             else if(res.day_claims_at.length == 4 && res.day_claims_at[0] * multiTime < Date.now() - oneday) {
               let rand = Math.floor(Math.random() * 5) + 1;
               await sleep(2000 * rand);
-              await barleyFetch();
+              await buyBarleyMarket();
               let barley = barleyArr[0];
               let memo = "feed_animal:"+id;
               sendToken(res.name, barley, "Feed", memo);    
@@ -1510,15 +1510,12 @@ async function withdrawnResource() {
 ////////////////////////////////////////withdrawn/////////////////////////////////////////
 ///////////////////////////////////////buy barley/////////////////////////////////////////
 async function buyBarleyMarket() {
-  let setTime = 0;
-  if(chkFirstTime === false) {
-    setTime = ((Math.floor(Math.random() * 10) + 1)*10000) + 120000;
+  try {
+    await barleyFetch();
   }
-  else {
-    setTime = ((Math.floor(Math.random() * 10) + 1)*10000) + 20000;
+  catch(err) {   
   }
-  setInterval(async() => {
-  await barleyFetch();
+  
   let getBarley = localStorage.getItem("barley");
   if(getBarley === "on" && barleyArr.length <= 7 ) {
 
@@ -1548,9 +1545,7 @@ async function buyBarleyMarket() {
           document.getElementById('log').innerHTML += thisTime() + `: ซื้อ Barley ไม่ สำเร็จ (${result.processed.receipt.status}) \n`;
           scrollTextarea();
         }
-  
   }
-  }, delayTime + setTime); 
 }
 ///////////////////////////////////////buy barley/////////////////////////////////////////
 ////////////////////////////////////////auto sell////////////////////////////////////////
