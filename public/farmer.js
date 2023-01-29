@@ -856,7 +856,7 @@ async function toolTable() {
           let rand = Math.floor(Math.random() * 20) + 1;
           await sleep(3000 * rand); 
           if(timeProcess < Date.now()) {                
-            claimTool(elem.asset_id, toolnameObj[elem.asset_id], "claim");
+            await claimTool(elem.asset_id, toolnameObj[elem.asset_id], "claim");
           }
 
           if(elem.current_durability < repairPercen) {
@@ -1512,40 +1512,40 @@ async function withdrawnResource() {
 async function buyBarleyMarket() {
   try {
     await barleyFetch();
+    let getBarley = localStorage.getItem("barley");
+    if(getBarley === "on" && barleyArr.length <= 7 && barleyArr.length !== 0) {
+        let result = await wax.api.transact({ 
+          actions: [{
+            account: 'farmersworld',
+              name: "mktbuy",
+              authorization: [{
+                actor: wax.userAccount,
+                permission: 'active',
+              }],
+              data: {
+                owner: wax.userAccount,
+                template_id: 318606,   
+                quantity: 25       
+              },
+            }]
+          }, {
+            blocksBehind: 3,
+            expireSeconds: 30
+          });
+          if (result.processed.receipt.status === "executed") {
+            document.getElementById('log').innerHTML += thisTime() + `: ซื้อ Barley 25 ต้น สำเร็จ !!! \n`;
+            scrollTextarea();
+          }
+          else {
+            document.getElementById('log').innerHTML += thisTime() + `: ซื้อ Barley ไม่ สำเร็จ (${result.processed.receipt.status}) \n`;
+            scrollTextarea();
+          }
+    }
   }
   catch(err) {   
   }
   
-  let getBarley = localStorage.getItem("barley");
-  if(getBarley === "on" && barleyArr.length <= 7 ) {
-
-      let result = await wax.api.transact({ 
-        actions: [{
-          account: 'farmersworld',
-            name: "mktbuy",
-            authorization: [{
-              actor: wax.userAccount,
-              permission: 'active',
-            }],
-            data: {
-              owner: wax.userAccount,
-              template_id: 318606,   
-              quantity: 25       
-            },
-          }]
-        }, {
-          blocksBehind: 3,
-          expireSeconds: 30
-        });
-        if (result.processed.receipt.status === "executed") {
-          document.getElementById('log').innerHTML += thisTime() + `: ซื้อ Barley 25 ต้น สำเร็จ !!! \n`;
-          scrollTextarea();
-        }
-        else {
-          document.getElementById('log').innerHTML += thisTime() + `: ซื้อ Barley ไม่ สำเร็จ (${result.processed.receipt.status}) \n`;
-          scrollTextarea();
-        }
-  }
+ 
 }
 ///////////////////////////////////////buy barley/////////////////////////////////////////
 ////////////////////////////////////////auto sell////////////////////////////////////////
