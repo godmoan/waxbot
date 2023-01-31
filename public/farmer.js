@@ -922,7 +922,7 @@ async function memTable() {
           let rand = Math.floor(Math.random() * 8) + 1;
           if(timeProcess < Date.now()) {
             await sleep(5000 * rand);
-            claimTool(id, memnameObj[id], "mbsclaim");
+            await claimTool(id, memnameObj[id], "mbsclaim");
           }  
           if(savemode === 1) {
             document.getElementById("countDown-"+elem.asset_id).innerHTML = "Save Mode"
@@ -963,7 +963,7 @@ async function buildingTable() {
       if(timeProcess < Date.now()) {
         let rand = Math.floor(Math.random() * 8) + 1;
         await sleep(1000 * rand);
-        claimTool(id, res.name, "bldclaim");
+        await claimTool(id, res.name, "bldclaim");
       }
     }      
   });
