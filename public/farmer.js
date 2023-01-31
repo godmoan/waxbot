@@ -1,5 +1,5 @@
 ///////////////////////////////////////variable///////////////////////////////////////
-let version = "5.0.3";
+let version = "5.0.4";
 const endpointJson = {"u1": "https://chain.wax.io", "u2": "https://wax.eu.eosamsterdam.net", "u3": "https://wax.blokcrafters.io", "u4": "https://api.wax.alohaeos.com", "u5": "https://api.waxsweden.org", "u6": "https://wax.pink.gg", "u7": "https://wax.dapplica.io","u8": "https://wax.eosphere.io", "u9": "https://api.wax.greeneosio.com", "u10": "https://wax.cryptolions.io", "u11": "https://wax.eosusa.news", "u12": "https://api.wax.bountyblok.io", "u13": "https://wax.greymass.com", "u14": "https://wax.eosrio.io", "u15": "https://wax.eosdublin.io"};
 const endpointArr = ["https://chain.wax.io", "https://wax.eu.eosamsterdam.net", "https://wax.blokcrafters.io", "https://api.wax.alohaeos.com", "https://api.waxsweden.org", "https://wax.pink.gg", "https://wax.dapplica.io", "https://wax.eosphere.io", "https://api.wax.greeneosio.com", "https://wax.cryptolions.io", "https://wax.eosusa.news", "https://api.wax.bountyblok.io", "https://wax.greymass.com", "https://wax.eosrio.io", "https://wax.eosdublin.io"];
 let selectEndpoint;
@@ -804,7 +804,7 @@ async function barleyFetch() {
 //////////////////////////////////////fetch barley/////////////////////////////////////////
 /////////////////////////////////////////tool table///////////////////////////////////////////
 async function toolTable() {
-  let setTime = 0;
+  let setTime = 10000;
   if(chkFirstTime === false) {
     setTime = ((Math.floor(Math.random() * 10) + 1)*10000) + 90000;
   }
@@ -853,15 +853,11 @@ async function toolTable() {
           let memMultipy = memStoreClaim[elem.type];
           let timeStart = elem.next_availability;
           let timeProcess = (timeStart * multiTime) + ((obj.quan * memMultipy) * onehrs);
-          let rand = Math.floor(Math.random() * 20) + 1;
-          await sleep(3000 * rand); 
           if(timeProcess < Date.now()) {                
             await claimTool(elem.asset_id, toolnameObj[elem.asset_id], "claim");
           }
 
           if(elem.current_durability < repairPercen) {
-            let rand = Math.floor(Math.random() * 5) + 1;
-            await sleep(2000 * rand);
             chkRepair(elem.asset_id, toolnameObj[elem.asset_id]);
           }
 
@@ -878,7 +874,7 @@ async function toolTable() {
 /////////////////////////////////////////tool table///////////////////////////////////////////
 /////////////////////////////////////////mem table///////////////////////////////////////////
 async function memTable() {
-  let setTime = 0;
+  let setTime = 20000;
   if(chkFirstTime === false) {
     setTime = ((Math.floor(Math.random() * 10) + 1)*10000) + 60000;
   }
@@ -919,9 +915,7 @@ async function memTable() {
           let id = elem.asset_id;
           let timeStart = elem.next_availability;
           let timeProcess = (timeStart * multiTime);
-          let rand = Math.floor(Math.random() * 8) + 1;
           if(timeProcess < Date.now()) {
-            await sleep(5000 * rand);
             await claimTool(id, memnameObj[id], "mbsclaim");
           }  
           if(savemode === 1) {
@@ -934,7 +928,7 @@ async function memTable() {
 /////////////////////////////////////////mem table///////////////////////////////////////////
 ////////////////////////////////////////building table////////////////////////////////////////
 async function buildingTable() {
-  let setTime = 0;
+  let setTime = 40000;
   if(chkFirstTime === false) {
     setTime = ((Math.floor(Math.random() * 10) + 1)*10000) + 60000;
   }
@@ -961,8 +955,6 @@ async function buildingTable() {
       let timeStart = timeClaim;
       let timeProcess = (timeStart * multiTime);
       if(timeProcess < Date.now()) {
-        let rand = Math.floor(Math.random() * 8) + 1;
-        await sleep(1000 * rand);
         await claimTool(id, res.name, "bldclaim");
       }
     }      
@@ -972,7 +964,7 @@ async function buildingTable() {
 ////////////////////////////////////////building table////////////////////////////////////////
 //////////////////////////////////////////farm table//////////////////////////////////////////
 async function farmTable() {
-  let setTime = 0;
+  let setTime = 50000;
   if(chkFirstTime === false) {
     setTime = ((Math.floor(Math.random() * 10) + 1)*10000) + 60000;
   }
@@ -999,8 +991,6 @@ async function farmTable() {
 
     let timeProcess = (timeClaim * multiTime);
     if(timeProcess < Date.now()) {
-      let rand = Math.floor(Math.random() * 5) + 1;
-      sleep(2000 * rand);
       claimFarm(id, res.name, "cropclaim");
       }
   });
@@ -1009,7 +999,7 @@ async function farmTable() {
 //////////////////////////////////////////farm table//////////////////////////////////////////
 ////////////////////////////////////////livestock table///////////////////////////////////////
 async function animalTable() {
-  let setTime = 0;
+  let setTime = 30000;
   if(chkFirstTime === false) {
     setTime = ((Math.floor(Math.random() * 10) + 1)*10000) + 80000;
   }
@@ -1033,16 +1023,14 @@ async function animalTable() {
       `</div><br>`; 
 
     let timeProcess = (timeClaim * multiTime);
-    //let barley;
-    //let memo;
     if(timeProcess < Date.now()) { //&& res.day_claims_at[0] * multiTime < Date.now() - oneday
       switch(res.name) {
         case "Chicken Egg":
           if(res.day_claims_at.length < 3) {
-            claimAni(id, res.name, "anmclaim");   
+            await claimAni(id, res.name, "anmclaim");   
           }  
           else if(res.day_claims_at.length == 3 && res.day_claims_at[0] * multiTime < Date.now() - oneday) {
-            claimAni(id, res.name, "anmclaim");   
+            await claimAni(id, res.name, "anmclaim");   
           }  
           break;
         case "Chick":
@@ -1052,7 +1040,7 @@ async function animalTable() {
             await buyBarleyMarket();
             let barley = barleyArr[0];
             let memo = "feed_animal:"+id;
-            sendToken(res.name, barley, "Feed", memo); 
+            await sendToken(res.name, barley, "Feed", memo); 
           }
           else if(res.day_claims_at.length == 4 && res.day_claims_at[0] * multiTime < Date.now() - oneday) {
             let rand = Math.floor(Math.random() * 5) + 1;
@@ -1060,7 +1048,7 @@ async function animalTable() {
             await buyBarleyMarket();
             let barley = barleyArr[0];
             let memo = "feed_animal:"+id;
-            sendToken(res.name, barley, "Feed", memo); 
+            await sendToken(res.name, barley, "Feed", memo); 
           }
           break;
         case "Chicken":
@@ -1070,7 +1058,7 @@ async function animalTable() {
             await buyBarleyMarket();
             let barley = barleyArr[0];
             let memo = "feed_animal:"+id;
-            sendToken(res.name, barley, "Feed", memo);  
+            await sendToken(res.name, barley, "Feed", memo);  
           }
           else if(res.day_claims_at.length == 4 && res.day_claims_at[0] * multiTime < Date.now() - oneday) {
             let rand = Math.floor(Math.random() * 5) + 1;
@@ -1078,7 +1066,7 @@ async function animalTable() {
             await buyBarleyMarket();
             let barley = barleyArr[0];
             let memo = "feed_animal:"+id;
-            sendToken(res.name, barley, "Feed", memo);  
+            await sendToken(res.name, barley, "Feed", memo);  
           }
           break;
         case "Baby Calf":
@@ -1088,7 +1076,7 @@ async function animalTable() {
             await milkFetch();
             let milk = milkArr[0];  
             let memo = "feed_animal:"+id;    
-            sendToken(res.name, milk, "Feed", memo);     
+            await sendToken(res.name, milk, "Feed", memo);     
           }    
           else if(res.day_claims_at.length == 2 && res.day_claims_at[0] * multiTime < Date.now() - oneday) {
             let rand = Math.floor(Math.random() * 5) + 1;
@@ -1096,7 +1084,7 @@ async function animalTable() {
             await milkFetch();
             let milk = milkArr[0];  
             let memo = "feed_animal:"+id;    
-            sendToken(res.name, milk, "Feed", memo);     
+            await sendToken(res.name, milk, "Feed", memo);     
           }  
           break;  
         case "Calf":
@@ -1106,7 +1094,7 @@ async function animalTable() {
             await buyBarleyMarket();
             let barley = barleyArr[0];
             let memo = "feed_animal:"+id;
-            sendToken(res.name, barley, "Feed", memo);     
+            await sendToken(res.name, barley, "Feed", memo);     
           } 
           else if(res.day_claims_at.length == 4 && res.day_claims_at[0] * multiTime < Date.now() - oneday) {
             let rand = Math.floor(Math.random() * 5) + 1;
@@ -1114,7 +1102,7 @@ async function animalTable() {
             await buyBarleyMarket();
             let barley = barleyArr[0];
             let memo = "feed_animal:"+id;
-            sendToken(res.name, barley, "Feed", memo);     
+            await sendToken(res.name, barley, "Feed", memo);     
           }
           break;
         case "Dairy Cow":
@@ -1124,7 +1112,7 @@ async function animalTable() {
             await buyBarleyMarket();
             let barley = barleyArr[0];
             let memo = "feed_animal:"+id;
-            sendToken(res.name, barley, "Feed", memo);   
+            await sendToken(res.name, barley, "Feed", memo);   
           }
           else if(res.day_claims_at.length == 6 && res.day_claims_at[0] * multiTime < Date.now() - oneday) {
             let rand = Math.floor(Math.random() * 5) + 1;
@@ -1132,7 +1120,7 @@ async function animalTable() {
             await buyBarleyMarket();
             let barley = barleyArr[0];
             let memo = "feed_animal:"+id;
-            sendToken(res.name, barley, "Feed", memo);   
+            await sendToken(res.name, barley, "Feed", memo);   
           }
           break;
           case "Calf (FeMale)":
@@ -1142,7 +1130,7 @@ async function animalTable() {
               await buyBarleyMarket();
             let barley = barleyArr[0];
             let memo = "feed_animal:"+id;
-            sendToken(res.name, barley, "Feed", memo);   
+            await sendToken(res.name, barley, "Feed", memo);   
             }
             else if(res.day_claims_at.length == 4 && res.day_claims_at[0] * multiTime < Date.now() - oneday) {
               let rand = Math.floor(Math.random() * 5) + 1;
@@ -1150,7 +1138,7 @@ async function animalTable() {
               await buyBarleyMarket();
               let barley = barleyArr[0];
               let memo = "feed_animal:"+id;
-              sendToken(res.name, barley, "Feed", memo);   
+              await sendToken(res.name, barley, "Feed", memo);   
               }
           break;
           case "Calf (Male)":
@@ -1158,7 +1146,7 @@ async function animalTable() {
             await buyBarleyMarket();
             let barley = barleyArr[0];
             let memo = "feed_animal:"+id;
-            sendToken(res.name, barley, "Feed", memo);    
+            await sendToken(res.name, barley, "Feed", memo);    
             }
             else if(res.day_claims_at.length == 4 && res.day_claims_at[0] * multiTime < Date.now() - oneday) {
               let rand = Math.floor(Math.random() * 5) + 1;
@@ -1166,7 +1154,7 @@ async function animalTable() {
               await buyBarleyMarket();
               let barley = barleyArr[0];
               let memo = "feed_animal:"+id;
-              sendToken(res.name, barley, "Feed", memo);    
+              await sendToken(res.name, barley, "Feed", memo);    
               }
           break;
       }
